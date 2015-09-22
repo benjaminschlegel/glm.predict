@@ -7,7 +7,7 @@ predicted values and discrete change
 \description{
 The function calcultes the predicted values and the difference of
 a range of cases with the confidence interval. It can be used for any
-glm model. - NOTICE: THE FUNCTION DOES NOT WORK WITH INTERAKTION THERM!
+glm model. - NOTICE: THE FUNCTION DOES NOT WORK WITH INTERACTION TERMS!
 }
 \usage{
 discrete.changes(model, values, sim.count=1000, conf.int=0.95)
