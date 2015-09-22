@@ -1,0 +1,2 @@
+import(MASS)
+export(discrete.change,discrete.changes)
