@@ -63,7 +63,7 @@ function(model,values1,values2,sim.count=1000,conf.int=0.95){
   results = results[,-1]
   
   for(i in 1:length(all[1,])){
-    results = cbind(results,c(mean(all[,i]),quantile(all[,i],(1-conf.int)/2),quantile(all[,i],conf.int+(1-conf.int)/2)))
+    results = cbind(results,c(mean(all[,i],na.rm=T),quantile(all[,i],(1-conf.int)/2,na.rm=T),quantile(all[,i],conf.int+(1-conf.int)/2,na.rm=T)))
   }
   
   results = t(results[1:3,])

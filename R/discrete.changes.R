@@ -1,8 +1,33 @@
 discrete.changes <-
 function(model, values, sim.count=1000, conf.int=0.95){
   if(!is.character(values)){
-    stop("values mus be given as character!")
+    stop("values must be given as character!")
   }
+  
+  # check if any interaction
+  formula = formula(model)
+  dvs = unlist(strsplit(as.character(formula)[3]," + ", fixed=T))
+  ia = c()
+  for(dv in dvs){
+    if(grepl(":",dv)){
+      ia = c(ia,2)
+      stop("Formula contains :, works only with * for interaction")
+    }else if(grepl("\\*",dv)){
+      ia = c(ia,1)
+    }else{
+      ia = c(ia, 0)
+    }
+  }
+  
+  formula = gsub(" \\* ", " + ", as.character(formula)[3])
+  formula = gsub(" : ", " + ", formula)
+  formula = gsub("\\*", " + ", formula)
+  formula = gsub(":", " + ", formula)
+  
+  # remove dublicates
+  temp.formula = unlist(strsplit(formula," + ", fixed=T))
+  temp.formula = unique(temp.formula)
+  
   var.pos = 1
   current.values = NA
   values.vector = unlist(strsplit(values,";"))
@@ -16,7 +41,7 @@ function(model, values, sim.count=1000, conf.int=0.95){
     multi = FALSE
     stopit = FALSE
     if(grepl("^mode$",value,ignore.case = TRUE)){
-      temp = unlist(strsplit(as.character(formula(model1)[3])," \\+ "))[k]
+      temp = unlist(strsplit(as.character(formula)," \\+ "))[k]
       if(!is.null(model$data)){
         data = model$data
         variable = data[,grep(temp,colnames(data),value=T)[1]]
@@ -33,6 +58,7 @@ function(model, values, sim.count=1000, conf.int=0.95){
         }
         
       }
+      
     }
     if(stopit){}
     else if(grepl("^F[0-9]+\\([0-9]+\\)$",value,ignore.case = TRUE)){
@@ -79,7 +105,7 @@ function(model, values, sim.count=1000, conf.int=0.95){
         current.values[j,2] = 1
       }
     }else if(grepl("^mean$",value,ignore.case = TRUE)){
-      temp = unlist(strsplit(as.character(formula(model1)[3])," \\+ "))[k]
+      temp = unlist(strsplit(as.character(formula)," \\+ "))[k]
       if(!is.null(model$data)){
        data = model$data
        variable = data[,grep(temp,colnames(data),value=T)[1]]
@@ -90,7 +116,7 @@ function(model, values, sim.count=1000, conf.int=0.95){
        global.counter = global.counter + 1
       }
     }else if(grepl("^median$",value,ignore.case = TRUE)){
-      temp = unlist(strsplit(as.character(formula(model1)[3])," \\+ "))[k]
+      temp = unlist(strsplit(as.character(formula)," \\+ "))[k]
       if(!is.null(model$data)){
         data = model$data
         variable = data[,grep(temp,colnames(data),value=T)[1]]
@@ -178,7 +204,7 @@ function(model, values, sim.count=1000, conf.int=0.95){
 
   result = data.frame(mean1=NA,mean2=NA,lower1=NA,upper1=NA,lower2=NA,upper2=NA,mean.diff=NA,lower.diff=NA,upper.diff=NA)
   names = colnames(result)
-  names.temp = unlist(strsplit(as.character(formula(model1)[3])," \\+ "))
+  names.temp = unlist(strsplit(as.character(formula)," \\+ "))
   var.names = names.temp
   pos.found = FALSE
   for(i in 1:length(names.temp)){
@@ -230,13 +256,18 @@ function(model, values, sim.count=1000, conf.int=0.95){
         if(j != var.pos && !in.factor){
           if(j > var.pos){
             n.temp = length(unlist(temp.results[j]))
-            if(length(which(factor.collector$pos<j))>0){
-              rows = which(factor.collector$pos<j)
-              amount = sum(factor.collector[rows,]$length) - length(rows)
-            }else{
-              amount = 1
+            prod_start = 1
+            if(length(which(factor.collector$pos==j))>0){
+              prod_start = j-1
             }
-            e = (ceiling((counter/products[j-amount]))-1) %% n.temp + 1
+#             if(length(which(factor.collector$pos<j))>0){
+#               rows = which(factor.collector$pos<j)
+#               amount = sum(factor.collector[rows,]$length) - length(rows)
+#               amount = 1
+#             }else{
+#               amount = 1
+#             }
+            e = (ceiling((counter/(products[j-1]/products[prod_start])))-1) %% n.temp + 1
           }else{
             n.temp = length(unlist(temp.results[j]))
             e = (ceiling((counter/products[j]))-1) %% n.temp + 1
@@ -410,11 +441,50 @@ function(model, values, sim.count=1000, conf.int=0.95){
           c = c + 1
         }
       }
+      
+      # interaction
+      ia.counter = 2
+      kick.out = c()
+      for(ia.value in ia){
+        if(ia.value==0){ #: +
+          ia.counter = ia.counter + 1
+        }
+        if(ia.value==1 || ia.value==2){ # *
+          if(ia.counter != 2){
+            if(length(which(factor.collector$pos==ia.counter-1))>0){
+              row = which(factor.collector$pos==ia.counter-1)
+              l1 = factor.collector[row,]$length
+            }else{
+              l1 = 1
+            }
+          }else{
+            l1 = 1
+          }
+          if(length(which(factor.collector$pos==ia.counter))>0){
+            row = which(factor.collector$pos==ia.counter)
+            l2 = factor.collector[row,]$length
+          }else{
+            l2 = 1
+          }
+          for(l1.i in 1:l1){
+            for(l2.i in 1:l2){
+              temp1 = c(temp1,temp1[ia.counter-1+l1.i]*temp1[ia.counter-1+l1+l2.i])
+              temp2 = c(temp2,temp2[ia.counter-1+l1.i]*temp2[ia.counter-1+l1+l2.i])
+            }
+          }  
+          if(ia.value==2){ # :
+            kick.out = c(kick.out,(ia.counter):(ia.counter-1+l1+l2))
+          }
+        }
+      }
+      if(!is.null(kick.out)){
+        temp1 = temp1[-(kick.out)]
+      }
+      
       if(ok){
-#          print(temp1)
-#          print(temp2)
-#          print("-------------------")
-        
+         # print(temp1)
+        #  print(temp2)
+         # print("-------------------")
         subresult = discrete.change(model,temp1,temp2,sim.count,conf.int)
         result[counter+(i-2)*product,]$mean1 = subresult[1,1]
         result[counter+(i-2)*product,]$mean2 = subresult[2,1]
