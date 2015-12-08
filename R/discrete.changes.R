@@ -36,6 +36,7 @@ function(model, values, sim.count=1000, conf.int=0.95){
   temp.results = list()
   factor.collector = data.frame(pos=NA,length=NA)
   factor.collector.counter = 1
+  factor.in.first = 0
   for(value in values.vector){
     #typen herausfinden
     multi = FALSE
@@ -93,6 +94,9 @@ function(model, values, sim.count=1000, conf.int=0.95){
         multi = TRUE
       }
       n = temp[1]
+      if(global.counter == 1){
+        factor.in.first = n
+      }
       factor.collector[factor.collector.counter,]$pos = global.counter
       factor.collector[factor.collector.counter,]$length = n-1
       global.counter = global.counter + n-1
@@ -210,11 +214,11 @@ function(model, values, sim.count=1000, conf.int=0.95){
   for(i in 1:length(names.temp)){
     if(i == var.pos){
       old.name = names.temp[i]
-      names.temp[i] = paste0(old.name,"1")
+      names.temp[i] = paste0(old.name,".1")
       if(!is.na(names.temp[i+1])){
         temp.save = names.temp[i+1]
       }
-      names.temp[i+1] = paste0(old.name,"2")
+      names.temp[i+1] = paste0(old.name,".2")
       pos.found=TRUE
     }
     else if(pos.found){
@@ -236,8 +240,9 @@ function(model, values, sim.count=1000, conf.int=0.95){
   count.checker = 0
   e.new = 0
   start_c3 = 1
-  
-  #print(products)
+  p1 = 1
+  p2 = 2
+  added.t1 = FALSE
   
   for(i in 2:n){
     for(counter in 1:product){
@@ -252,13 +257,18 @@ function(model, values, sim.count=1000, conf.int=0.95){
       t1_counter = 0
       t2_counter = 0
       do_colcounter = 0
+      is.first = TRUE
       for(j in 1:n.variables){
         if(j != var.pos && !in.factor){
+          j.temp = j
+          if(factor.in.first>0){
+            j.temp = j - factor.in.first + 3
+          }
           if(j > var.pos){
             n.temp = length(unlist(temp.results[j]))
             prod_start = 1
             if(length(which(factor.collector$pos==j))>0){
-              prod_start = j-1
+              prod_start = j.temp-1
             }
 #             if(length(which(factor.collector$pos<j))>0){
 #               rows = which(factor.collector$pos<j)
@@ -267,22 +277,25 @@ function(model, values, sim.count=1000, conf.int=0.95){
 #             }else{
 #               amount = 1
 #             }
-            e = (ceiling((counter/(products[j-1]/products[prod_start])))-1) %% n.temp + 1
+
+            e = (ceiling((counter/((products[j.temp-1])/(products[prod_start]))))-1) %% n.temp + 1
+            #print(paste0("counter: ",counter,", products[j-1]: ",products[j.temp-1],", products[prod_start]: ",products[prod_start],"n.temp: ", n.temp,"e: ",e))
+            
           }else{
-            n.temp = length(unlist(temp.results[j]))
-            e = (ceiling((counter/products[j]))-1) %% n.temp + 1
+            n.temp = length(unlist(temp.results[j.temp]))
+            e = (ceiling((counter/(products[j.temp])))-1) %% n.temp + 1
           }
           t1 = unlist(temp.results[j])[e]
           t2 = unlist(temp.results[j])[e]
-          if(length(which(factor.collector$pos<=j && factor.collector$pos+factor.collector$length>j))>0){
-            row = which(factor.collector$pos<=j && factor.collector$pos+factor.collector$length>j)
+          if(length(which(factor.collector$pos<=j & factor.collector$pos+factor.collector$length>j))>0){
+            row = which(factor.collector$pos<=j & factor.collector$pos+factor.collector$length>j)
             from = factor.collector[row,]$pos
             l = factor.collector[row,]$length
             to = from + l
             if(j == to-1){
               varcounter = varcounter + 1
               levels = levels(model$data[,var.names[varcounter]])
-              if(sum(temp1[(from+1):(to-1)])+t1==0){
+              if(sum(temp1[(from):(to-1)])+t1==0){
                 result[counter+(i-2)*product,colcounter] = levels[1]
               }else if(t1 == 1){
                 result[counter+(i-2)*product,colcounter] = levels[length(levels)]
@@ -302,113 +315,162 @@ function(model, values, sim.count=1000, conf.int=0.95){
           }
           
         }else{
-          if(length(which(factor.collector$pos<=j && factor.collector$pos+factor.collector$length>j))>0){
-            row = which(factor.collector$pos<=j && factor.collector$pos+factor.collector$length>j)
-            from = factor.collector[row,]$pos
-            l = factor.collector[row,]$length
-            to = from + l
-            if(factor.position == 0){
-              factor.position = j
-            }
-            
-            if(count.checker>products[factor.position+1]){
-              c.temp = 0
-              c1 = 0
-              c2 = 1
-              c3 = 1
-              start_c3 = 1
-              e.new = 0
-              count.checker = count.checker - products[factor.position+1]
-            }
-            
-            e.old = e.new
-            e.new = (ceiling((counter/products[factor.position]))-1) + 1
-            
-            c = floor(sqrt(products[factor.position+1] / products[factor.position] * 2))
-            if(c.temp == 0){
-              c.temp = c
-            }
-            
-            if(c1<c){
-              c1 = c1 + 1
+          if(length(which(factor.collector$pos<=j & factor.collector$pos+factor.collector$length>j))>0){
+            if(factor.in.first != 0 && is.first){
+              if(j == 1){
+                p = (products[length(products)] / products[2])
+                if(!exists("p.c")){
+                  p.c = p
+                }
+                if(!did_varcount){
+                  varcounter = varcounter + 1
+                  did_varcount = TRUE
+                }
+                levels = levels(model$data[,var.names[varcounter]])
+                result[counter,10] = levels[p1]
+                result[counter,11] = levels[p2]
+                t1 = c()
+                t2 = c()
+                for(k in 1:(factor.in.first-1)){
+                  temp.p1 = p1-1
+                  temp.p2 = p2-1
+                  if(k == temp.p1){
+                    t1 = c(t1,1)
+                  }else{
+                    t1 = c(t1,0)
+                  }
+                  if(k == temp.p2){
+                    t2 = c(t2,1)
+                  }else{
+                    t2 = c(t2,0)
+                  }
+                }
+                p.c = p.c-1
+                if(p.c<1){
+                  p.c = p
+                  p2 = p2+1
+                  if(p2 > factor.in.first){
+                    p1 = p1+1
+                    p2 = p1+1
+                  }
+                }
+                in.factor = T
+                colcounter = colcounter + 2
+              }
+              if(j >= factor.in.first-1){
+                is.first = F
+                in.factor = F
+              }
             }else{
-              c1 = 1
-            }
-            
-            if(e.old != 0 && e.old != e.new){
-              if(c2<c.temp){
-                c2 = c2 + 1
-              }else{
-                c2 = 1
-                c.temp = c.temp - 1
+              row = which(factor.collector$pos<=j & factor.collector$pos+factor.collector$length>j)
+              from = factor.collector[row,]$pos
+              l = factor.collector[row,]$length
+              to = from + l
+              if(factor.position == 0){
+                factor.position = j
               }
-              if(c3==c){
-                start_c3 = start_c3 + 1
-                c3 = start_c3
-              }else{
-                c3 = c3 + 1
-              }
-            }
-            
-            if(c-c.temp==c1){
-              t1 = 1
-              if(!did_varcount){
-                varcounter = varcounter + 1
-                did_varcount = TRUE
-              }
-              levels = levels(model$data[,var.names[varcounter]])
-              result[counter+(i-2)*product,colcounter] = levels[c1+1]
-              do_colcounter = do_colcounter + 1
               
-            }else{
-              t1 = 0
-              t1_counter = t1_counter + 1
-            }
-            
-            if(t1_counter == c){
-              if(!did_varcount){
-                varcounter = varcounter + 1
-                did_varcount = TRUE
+              if(count.checker>products[factor.position+1]){
+                c.temp = 0
+                c1 = 0
+                c2 = 1
+                c3 = 1
+                start_c3 = 1
+                e.new = 0
+                count.checker = count.checker - products[factor.position+1]
+                
               }
-              levels = levels(model$data[,var.names[varcounter]])
-              result[counter+(i-2)*product,colcounter] = levels[1]
-              do_colcounter = do_colcounter + 1
-            }
-            
-            if(c3==c1){
-              t2 = 1
-              if(!did_varcount){
-                varcounter = varcounter + 1
-                did_varcount = TRUE
+              
+              e.old = e.new
+              e.new = (ceiling((counter/(products[factor.position])))-1) + 1
+              
+              c = floor(sqrt(products[factor.position+1] / products[factor.position] * 2))
+              if(c.temp == 0){
+                c.temp = c
               }
-              levels = levels(model$data[,var.names[varcounter]])
-              result[counter+(i-2)*product,colcounter+1] = levels[c1+1]
-              do_colcounter = do_colcounter + 1
-            }else{
-              t2 = 0
-              t2_counter = t2_counter + 1
-            }
-            
-            if(t2_counter == c){
-              if(!did_varcount){
-                varcounter = varcounter + 1
-                did_varcount = TRUE
+              
+              if(c1<c){
+                c1 = c1 + 1
+              }else{
+                c1 = 1
               }
-              levels = levels(model$data[,var.names[varcounter]])
-              result[counter+(i-2)*product,colcounter+1] = levels[1]
-              do_colcounter = do_colcounter + 1
+              
+              
+              if(e.old != 0 && e.old != e.new){
+                if(c2<c.temp){
+                  c2 = c2 + 1
+                }else{
+                  c2 = 1
+                  c.temp = c.temp - 1
+                }
+                if(c3==c){
+                  start_c3 = start_c3 + 1
+                  c3 = start_c3
+                }else{
+                  c3 = c3 + 1
+                }
+              }
+              
+              if(c-c.temp==c1){
+                t1 = 1
+                if(!did_varcount){
+                  varcounter = varcounter + 1
+                  did_varcount = TRUE
+                }
+                levels = levels(model$data[,var.names[varcounter]])
+                result[counter+(i-2)*product] = levels[c1+1]
+                do_colcounter = do_colcounter + 1
+              }else{
+                t1 = 0
+                t1_counter = t1_counter + 1
+              }
+              
+              if(t1_counter == c){
+                if(!did_varcount){
+                  varcounter = varcounter + 1
+                  did_varcount = TRUE
+                }
+                levels = levels(model$data[,var.names[varcounter]])
+                result[counter+(i-2)*product,colcounter] = levels[1]
+                do_colcounter = do_colcounter + 1
+              }
+              
+              if(c3==c1){
+                t2 = 1
+                if(!did_varcount){
+                  varcounter = varcounter + 1
+                  did_varcount = TRUE
+                }
+                levels = levels(model$data[,var.names[varcounter]])
+                result[counter+(i-2)*product,colcounter+1] = levels[c1+1]
+                do_colcounter = do_colcounter + 1
+              }else{
+                t2 = 0
+                t2_counter = t2_counter + 1
+              }
+              
+              if(t2_counter == c){
+                if(!did_varcount){
+                  varcounter = varcounter + 1
+                  did_varcount = TRUE
+                }
+                levels = levels(model$data[,var.names[varcounter]])
+                result[counter+(i-2)*product,colcounter+1] = levels[1]
+                do_colcounter = do_colcounter + 1
+              }
+              
+              if(j < to-1){
+                in.factor = TRUE
+              }else{
+                in.factor = FALSE
+              }
+              
+              if(do_colcounter == 2){
+                colcounter = colcounter + 2
+                do_colcounter = 3
+              }
             }
             
-            if(j < to-1){
-              in.factor = TRUE
-            }else{
-              in.factor = FALSE
-            }
-            
-            if(do_colcounter == 2){
-              colcounter = colcounter + 2
-              do_colcounter = 3
-            }
           }else{
             t1 = unlist(temp.results[j])[i-1]
             t2 = unlist(temp.results[j])[i]
@@ -417,12 +479,12 @@ function(model, values, sim.count=1000, conf.int=0.95){
             colcounter = colcounter + 2
             varcounter = varcounter + 1
           }
-          
         }
+        if((factor.in.first != 0 && (j == 1 || j >= factor.in.first))|factor.in.first==0){
           temp1 = c(temp1,t1)
           temp2 = c(temp2,t2)
+        }
       }
-      
       
       # test if non possible result
       c = 1
@@ -482,9 +544,9 @@ function(model, values, sim.count=1000, conf.int=0.95){
       }
       
       if(ok){
-         # print(temp1)
-        #  print(temp2)
-         # print("-------------------")
+#           print(temp1)
+#           print(temp2)
+#           print("-------------------")
         subresult = discrete.change(model,temp1,temp2,sim.count,conf.int)
         result[counter+(i-2)*product,]$mean1 = subresult[1,1]
         result[counter+(i-2)*product,]$mean2 = subresult[2,1]
@@ -495,7 +557,6 @@ function(model, values, sim.count=1000, conf.int=0.95){
         result[counter+(i-2)*product,]$mean.diff = subresult[3,1]
         result[counter+(i-2)*product,]$lower.diff = subresult[3,2]
         result[counter+(i-2)*product,]$upper.diff = subresult[3,3]
-
       }
     }
   }
