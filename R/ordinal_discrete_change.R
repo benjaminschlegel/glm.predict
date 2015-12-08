@@ -1,4 +1,4 @@
-ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95){
+ordinal_discrete.change.t = function(model,v1,v2,sim.count = 1000, conf.int = 0.95){
   
   # check for correct imput
   if(length(v1) != length(v2) & length(v2) != length(coefficients(model))){
@@ -64,6 +64,7 @@ ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95
                    mean(delta[,i]),quantile(delta[,i],prob=c(lower,upper)))
   }
   colnames(result) = c("Mean1",paste0("1:",100*lower,"%"),paste0("1:",100*upper,"%"),"Mean2",paste0("2:",100*lower,"%"),paste0("2:",100*upper,"%"),"Mean.Diff",paste0("diff:",100*lower,"%"),paste0("diff:",100*upper,"%"))
+  rownames(result) = model$lev
   
   return(result)
 }
