@@ -1,4 +1,4 @@
-ordinal_discrete.change.t = function(model,v1,v2,sim.count = 1000, conf.int = 0.95){
+ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95){
   
   # check for correct imput
   if(length(v1) != length(v2) & length(v2) != length(coefficients(model))){
