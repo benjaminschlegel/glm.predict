@@ -28,6 +28,11 @@ from-to: same as from-to,by with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8) -
 value1,value2,value3,...: takes the given values (for example: "160,180" --> 160,180) - 
 value1: takes the given value (for example: "5.34" --> 5.34)
 }
+
+  \item{position}{
+OPTIONAL which variable should be taken for the dsicrete change, must have at least two values. default: 1
+}
+
   \item{sim.count}{
 OPTIONAL numbers of simulations to be done by the function. default: 1000
 }
