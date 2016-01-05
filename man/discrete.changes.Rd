@@ -10,7 +10,7 @@ a range of cases with the confidence interval. It can be used for any
 glm model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
-discrete.changes(model, values, sim.count=1000, conf.int=0.95)
+discrete.changes(model, values, position=1, sim.count=1000, conf.int=0.95)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
