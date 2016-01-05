@@ -2,8 +2,8 @@ nominal_discrete.change = function(model,v1,v2,sim.count=1000,conf.int=0.95){
   mu = coef(model)
   sigma = vcov(model)
   n.coefs = length(mu[1,])
-  sim = matrix(ncol=n.coefs,nrow=n)
   n = length(mu[,1])
+  sim = matrix(ncol=n.coefs,nrow=n)
   
   x = matrix(ncol=2,nrow=n+1)
   
