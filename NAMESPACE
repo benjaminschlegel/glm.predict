@@ -1,2 +1,2 @@
 import(MASS)
-export(discrete.change,discrete.changes,ordinal_discrete.change)
+export(discrete.change,discrete.changes,ordinal_discrete.change,nominal_discrete.change)
