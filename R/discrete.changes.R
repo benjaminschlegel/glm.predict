@@ -104,8 +104,8 @@ discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=
           term.part2.v2 = row.values2[pos.row.values:(pos.row.values+n.dummies-1)]
           pos.row.values = pos.row.values + n.dummies
         }else{
-          term.part2.v1 = row.values1[pos.row.value]
-          term.part2.v2 = row.values2[pos.row.value]
+          term.part2.v1 = row.values1[pos.row.values]
+          term.part2.v2 = row.values2[pos.row.values]
           pos.row.values = pos.row.values + 1
         }
         row.values1 = c(row.values1,term.part1.v1*term.part2.v1)
