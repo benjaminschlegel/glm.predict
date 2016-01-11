@@ -1,21 +1,21 @@
-\name{discrete.changes}
-\alias{discrete.changes}
+\name{nominal_discrete.changes}
+\alias{nominal_discrete.changes}
 
 \title{
-predicted values and discrete change
+predicted values and discrete changes for multinom models
 }
 \description{
 The function calcultes the predicted values and the difference of
-a range of cases with the confidence interval. It can be used for any
-glm model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
+a range of cases with the confidence interval. It can be used for a multinom
+model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
-discrete.changes(model, values, position=1, sim.count=1000, conf.int=0.95)
+nominal_discrete.changes(model, values, position=1, sim.count=1000, conf.int=0.95)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{model}{
-the glm-Object generated with glm()
+the multinom-Object generated with multinom() from package nnet
 }
   \item{values}{
 the values of cases as character in the order how they appear in the summary(model) Estimate
@@ -52,11 +52,13 @@ OPTIONAL the confidence interval used by the function. default: 0.95
 }
 
 \examples{
-model1 = glm(Sex ~ Height + Smoke + Pulse, data=MASS::survey, family=binomial(link=logit))
+data = MASS::survey
+data$Clap = relevel(data$Clap,ref="Neither")
+model1 = nnet::multinom(Clap ~ Sex + Height, data=data)
 summary(model1)
-# comparing person with hight 150 to 160, 160 to 170, 170 to 180, 180 to 190 
-# with all combination of(non-)smokers and a median of pulse 
-discrete.changes(model1, "150-190,10;F4;median")
+# comparing a woman to a man
+# with the values 160, 170, 180 and 190 for the height
+nominal_discrete.changes(model1, "0-1;160-190,10")
 }
 
 \keyword{ models }
