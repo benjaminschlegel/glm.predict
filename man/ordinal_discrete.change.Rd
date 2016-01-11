@@ -9,7 +9,7 @@ The function calcultes the predicted values and the difference of
 two cases with the confidence interval. It can be used for a polr model.
 }
 \usage{
-discrete.change(model, values1, values2, sim.count=1000, conf.int=0.95)
+ordinal_discrete.change(model, values1, values2, sim.count=1000, conf.int=0.95)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
