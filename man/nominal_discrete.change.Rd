@@ -1,5 +1,5 @@
-\name{ordinal_discrete.change}
-\alias{ordinal_discrete.change}
+\name{nominal_discrete.change}
+\alias{nominal_discrete.change}
 
 \title{
 predicted values and discrete change for multinom
