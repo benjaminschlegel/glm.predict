@@ -62,7 +62,7 @@ model1 = nnet::multinom(Clap ~ Sex + Height, data=data)
 summary(model1)
 # comparing a woman to a man
 # with the values 160, 170, 180 and 190 for the height
-nominal_discrete.changes(model1, "0-1;160-190,10")
+nominal_discrete.changes(model1, "0-1;160-190,10", data)
 }
 
 \keyword{ models }
