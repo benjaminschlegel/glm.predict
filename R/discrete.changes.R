@@ -104,8 +104,8 @@ discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=
           term.part2.v2 = row.values2[pos.row.values:(pos.row.values+n.dummies-1)]
           pos.row.values = pos.row.values + n.dummies
         }else{
-          term.part2.v1 = row.values1[pos.row.values]
-          term.part2.v2 = row.values2[pos.row.values]
+          term.part2.v1 = row.values1[pos.row.value]
+          term.part2.v2 = row.values2[pos.row.value]
           pos.row.values = pos.row.values + 1
         }
         row.values1 = c(row.values1,term.part1.v1*term.part2.v1)
@@ -128,7 +128,7 @@ discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=
     #     print(paste0(r,"-v1: ",toString(row.values1)))
     #     print(paste0(r,"-v2: ",toString(row.values2)))
   }
-  print(result)
+  return(result)
 }
 
 getFormulas = function(model){
@@ -189,7 +189,7 @@ getValues = function(model,values,formula){
       data = model$data
       data = data[,varName]
       if(!is.numeric(data)){
-        stop("Cannot callculted the mean of a non numeric variable")
+        stop("Cannot calculate the mean of a non numeric variable")
       }
       current.values = mean(data, na.rm=T)
     } # mean
@@ -198,10 +198,38 @@ getValues = function(model,values,formula){
       data = model$data
       data = data[,varName]
       if(!is.numeric(data)){
-        stop("Cannot callculted the median of a non numeric variable")
+        stop("Cannot calculate the median of a non numeric variable")
       }
       current.values = median(data, na.rm=T)
     } # median
+    else if(grepl("^Q[0-9]+$")){ # quantile
+      n.quantile = as.numeric(unlist(strsplit(value,"[Q\\]")))[2]
+      varName = formula[pos]
+      data = model$data
+      data = data[,varName]
+      if(!is.numeric(data)){
+        stop("Cannot calculate the quantiles of a non numeric variable")
+      }
+      current.values = quantile(data,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = T)
+    } # quantile
+    else if(grepl("^min$")){ # min
+      varName = formula[pos]
+      data = model$data
+      data = data[,varName]
+      if(!is.numeric(data)){
+        stop("Cannot calculate the minimum of a non numeric variable")
+      }
+      current.values = min(data,na.rm = T)
+    } # min
+    else if(grepl("^max$")){ # max
+      varName = formula[pos]
+      data = model$data
+      data = data[,varName]
+      if(!is.numeric(data)){
+        stop("Cannot calculate the maximum of a non numeric variable")
+      }
+      current.values = max(data,na.rm = T)
+    } # max
     else if(grepl("^F[0-9]+\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
       n = components[2]

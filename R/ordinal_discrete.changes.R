@@ -200,7 +200,7 @@ getValues_ordinal = function(model,values,formula){
       data = model$model
       data = data[,varName]
       if(!is.numeric(data)){
-        stop("Cannot callculted the mean of a non numeric variable")
+        stop("Cannot calculate the mean of a non numeric variable")
       }
       current.values = mean(data, na.rm=T)
     } # mean
@@ -209,10 +209,38 @@ getValues_ordinal = function(model,values,formula){
       data = model$model
       data = data[,varName]
       if(!is.numeric(data)){
-        stop("Cannot callculted the median of a non numeric variable")
+        stop("Cannot calculate the median of a non numeric variable")
       }
       current.values = median(data, na.rm=T)
     } # median
+    else if(grepl("^Q[0-9]+$")){ # quantile
+      n.quantile = as.numeric(unlist(strsplit(value,"[Q\\]")))[2]
+      varName = formula[pos]
+      data = model$model
+      data = data[,varName]
+      if(!is.numeric(data)){
+        stop("Cannot calculate the quantiles of a non numeric variable")
+      }
+      current.values = quantile(data,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = T)
+    } # quantile
+    else if(grepl("^min$")){ # min
+      varName = formula[pos]
+      data = model$model
+      data = data[,varName]
+      if(!is.numeric(data)){
+        stop("Cannot calculate the minimum of a non numeric variable")
+      }
+      current.values = min(data,na.rm = T)
+    } # min
+    else if(grepl("^max$")){ # max
+      varName = formula[pos]
+      data = model$model
+      data = data[,varName]
+      if(!is.numeric(data)){
+        stop("Cannot calculate the maximum of a non numeric variable")
+      }
+      current.values = max(data,na.rm = T)
+    } # max
     else if(grepl("^F[0-9]+\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
       n = components[2]
