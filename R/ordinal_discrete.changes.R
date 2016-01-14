@@ -6,7 +6,7 @@ ordinal_discrete.changes = function(model, values, position=1, sim.count=1000, c
   # check if any interaction
   formula = getFormulas(model) # variable names [[1]] and interaction positions[[2]]
   
-  value = getValues(model,values,formula[[1]]) # values as list [[1]] and positions of factors [[2]]
+  value = getValues_ordinal(model,values,formula[[1]]) # values as list [[1]] and positions of factors [[2]]
   
   products = getProducts(value,position)
   
@@ -46,8 +46,8 @@ ordinal_discrete.changes = function(model, values, position=1, sim.count=1000, c
         row.values2 = c(row.values2,current.values[f.v2,])
         
         # labels
-        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],f.v1)
-        result[row.from:row.to,data.frame.position+1] = getLabel(model,formula[[1]][i],f.v2)
+        result[row.from:row.to,data.frame.position] = getLabel_ordinal(model,formula[[1]][i],f.v1)
+        result[row.from:row.to,data.frame.position+1] = getLabel_ordinal(model,formula[[1]][i],f.v2)
         data.frame.position = data.frame.position + 2
       }else if(i==position){
         v2 = v1+1
@@ -69,7 +69,7 @@ ordinal_discrete.changes = function(model, values, position=1, sim.count=1000, c
             pos = p+1
           }
         }
-        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],pos)
+        result[row.from:row.to,data.frame.position] = getLabel_ordinal(model,formula[[1]][i],pos)
         data.frame.position = data.frame.position + 1
       }else{
         row.values1 = c(row.values1,current.values[v1])
@@ -169,7 +169,7 @@ getFormulas = function(model){
   return(list(temp.formula,ia))
 }
 
-getValues = function(model,values,formula){
+getValues_ordinal = function(model,values,formula){
   
   result = list()
   pos = 1
@@ -308,7 +308,7 @@ getNames = function(names,position){
   return(result)
 }
 
-getLabel = function(model,varName,pos){
+getLabel_ordinal = function(model,varName,pos){
   data = model$model
   data = data[,grep(varName,colnames(data),value=T)[1]]
   labels = levels(data)

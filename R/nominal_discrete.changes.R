@@ -6,7 +6,7 @@ nominal_discrete.changes = function(model, values, data, position=1, sim.count=1
   # check if any interaction
   formula = getFormulas(model) # variable names [[1]] and interaction positions[[2]]
   
-  value = getValues(model,values,formula[[1]],data) # values as list [[1]] and positions of factors [[2]]
+  value = getValues_nominal(model,values,formula[[1]],data) # values as list [[1]] and positions of factors [[2]]
   
   products = getProducts(value,position)
   
@@ -46,8 +46,8 @@ nominal_discrete.changes = function(model, values, data, position=1, sim.count=1
         row.values2 = c(row.values2,current.values[f.v2,])
         
         # labels
-        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],f.v1,data)
-        result[row.from:row.to,data.frame.position+1] = getLabel(model,formula[[1]][i],f.v2,data)
+        result[row.from:row.to,data.frame.position] = getLabel_nominal(model,formula[[1]][i],f.v1,data)
+        result[row.from:row.to,data.frame.position+1] = getLabel_nominal(model,formula[[1]][i],f.v2,data)
         data.frame.position = data.frame.position + 2
       }else if(i==position){
         v2 = v1+1
@@ -69,7 +69,7 @@ nominal_discrete.changes = function(model, values, data, position=1, sim.count=1
             pos = p+1
           }
         }
-        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],pos,data)
+        result[row.from:row.to,data.frame.position] = getLabel_nominal(model,formula[[1]][i],pos,data)
         data.frame.position = data.frame.position + 1
       }else{
         row.values1 = c(row.values1,current.values[v1])
@@ -169,12 +169,12 @@ getFormulas = function(model){
   return(list(temp.formula,ia))
 }
 
-getValues = function(model,values,formula,data){
+getValues_nominal = function(model,values,formula,data){
   
   result = list()
   pos = 1
   current.values = NA
-  data = data
+  use.data.stop.error = length(data)
   
   values.vector = unlist(strsplit(values,";"))
   is.factor = rep(F,length(values.vector))
@@ -305,7 +305,7 @@ getNames = function(names,position){
   return(result)
 }
 
-getLabel = function(model,varName,pos,data){
+getLabel_nominal = function(model,varName,pos,data){
   data = data[,grep(varName,colnames(data),value=T)[1]]
   labels = levels(data)
   return(labels[pos])
