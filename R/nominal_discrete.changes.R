@@ -174,14 +174,14 @@ getValues = function(model,values,formula,data){
   result = list()
   pos = 1
   current.values = NA
-  
+  data = data
   
   values.vector = unlist(strsplit(values,";"))
   is.factor = rep(F,length(values.vector))
   for(value in values.vector){
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       varName = formula[pos]
-      if(!is.null(model$data)){
+      if(!is.null(data)){
         data = data[,grep(varName,colnames(data),value=T)[1]]
         mode = Mode(data,na.rm=T)
         if(is.numeric(mode)){
