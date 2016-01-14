@@ -213,7 +213,7 @@ getValues_ordinal = function(model,values,formula){
       }
       current.values = median(data, na.rm=T)
     } # median
-    else if(grepl("^Q[0-9]+$")){ # quantile
+    else if(grepl("^Q[0-9]+$",value,ignore.case = TRUE)){ # quantile
       n.quantile = as.numeric(unlist(strsplit(value,"[Q\\]")))[2]
       varName = formula[pos]
       data = model$model
@@ -223,7 +223,7 @@ getValues_ordinal = function(model,values,formula){
       }
       current.values = quantile(data,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = T)
     } # quantile
-    else if(grepl("^min$")){ # min
+    else if(grepl("^min$",value,ignore.case = TRUE)){ # min
       varName = formula[pos]
       data = model$model
       data = data[,varName]
@@ -232,7 +232,7 @@ getValues_ordinal = function(model,values,formula){
       }
       current.values = min(data,na.rm = T)
     } # min
-    else if(grepl("^max$")){ # max
+    else if(grepl("^max$",value,ignore.case = TRUE)){ # max
       varName = formula[pos]
       data = model$model
       data = data[,varName]
