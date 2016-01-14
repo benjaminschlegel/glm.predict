@@ -10,7 +10,7 @@ a range of cases with the confidence interval. It can be used for a polr
 model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
-ordinal_discrete.changes(model, values, position=1, sim.count=1000, conf.int=0.95)
+ordinal_discrete.changes(model, values, data, position=1, sim.count=1000, conf.int=0.95)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,6 +27,10 @@ from-to,by: takes all values from "from" to "to" with the distance "by" (for exa
 from-to: same as from-to,by with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8) - 
 value1,value2,value3,...: takes the given values (for example: "160,180" --> 160,180) - 
 value1: takes the given value (for example: "5.34" --> 5.34)
+}
+
+  \item{data}{
+data.frame used to estimate the model
 }
 
   \item{position}{

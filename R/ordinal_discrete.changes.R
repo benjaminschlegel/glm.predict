@@ -181,8 +181,8 @@ getValues = function(model,values,formula){
   for(value in values.vector){
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       varName = formula[pos]
-      if(!is.null(model$data)){
-        data = model$data
+      if(!is.null(model$model)){
+        data = model$model
         data = data[,grep(varName,colnames(data),value=T)[1]]
         mode = Mode(data,na.rm=T)
         if(is.numeric(mode)){
@@ -197,7 +197,7 @@ getValues = function(model,values,formula){
     } # mode
     else if(grepl("^mean$",value,ignore.case = TRUE)){ # mean
       varName = formula[pos]
-      data = model$data
+      data = model$model
       data = data[,varName]
       if(!is.numeric(data)){
         stop("Cannot callculted the mean of a non numeric variable")
@@ -206,7 +206,7 @@ getValues = function(model,values,formula){
     } # mean
     else if(grepl("^median$",value,ignore.case = TRUE)){ # median
       varName = formula[pos]
-      data = model$data
+      data = model$model
       data = data[,varName]
       if(!is.numeric(data)){
         stop("Cannot callculted the median of a non numeric variable")
@@ -309,7 +309,7 @@ getNames = function(names,position){
 }
 
 getLabel = function(model,varName,pos){
-  data = model$data
+  data = model$model
   data = data[,grep(varName,colnames(data),value=T)[1]]
   labels = levels(data)
   return(labels[pos])

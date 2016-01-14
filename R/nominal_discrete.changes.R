@@ -1,4 +1,4 @@
-nominal_discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=0.95){
+nominal_discrete.changes = function(model, values, data, position=1, sim.count=1000, conf.int=0.95){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -6,7 +6,7 @@ nominal_discrete.changes = function(model, values, position=1, sim.count=1000, c
   # check if any interaction
   formula = getFormulas(model) # variable names [[1]] and interaction positions[[2]]
   
-  value = getValues(model,values,formula[[1]]) # values as list [[1]] and positions of factors [[2]]
+  value = getValues(model,values,formula[[1]],data) # values as list [[1]] and positions of factors [[2]]
   
   products = getProducts(value,position)
   
@@ -46,8 +46,8 @@ nominal_discrete.changes = function(model, values, position=1, sim.count=1000, c
         row.values2 = c(row.values2,current.values[f.v2,])
         
         # labels
-        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],f.v1)
-        result[row.from:row.to,data.frame.position+1] = getLabel(model,formula[[1]][i],f.v2)
+        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],f.v1,data)
+        result[row.from:row.to,data.frame.position+1] = getLabel(model,formula[[1]][i],f.v2,data)
         data.frame.position = data.frame.position + 2
       }else if(i==position){
         v2 = v1+1
@@ -69,7 +69,7 @@ nominal_discrete.changes = function(model, values, position=1, sim.count=1000, c
             pos = p+1
           }
         }
-        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],pos)
+        result[row.from:row.to,data.frame.position] = getLabel(model,formula[[1]][i],pos,data)
         data.frame.position = data.frame.position + 1
       }else{
         row.values1 = c(row.values1,current.values[v1])
@@ -169,7 +169,7 @@ getFormulas = function(model){
   return(list(temp.formula,ia))
 }
 
-getValues = function(model,values,formula){
+getValues = function(model,values,formula,data){
   
   result = list()
   pos = 1
@@ -182,7 +182,6 @@ getValues = function(model,values,formula){
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       varName = formula[pos]
       if(!is.null(model$data)){
-        data = model$data
         data = data[,grep(varName,colnames(data),value=T)[1]]
         mode = Mode(data,na.rm=T)
         if(is.numeric(mode)){
@@ -197,7 +196,6 @@ getValues = function(model,values,formula){
     } # mode
     else if(grepl("^mean$",value,ignore.case = TRUE)){ # mean
       varName = formula[pos]
-      data = model$data
       data = data[,varName]
       if(!is.numeric(data)){
         stop("Cannot callculted the mean of a non numeric variable")
@@ -206,7 +204,6 @@ getValues = function(model,values,formula){
     } # mean
     else if(grepl("^median$",value,ignore.case = TRUE)){ # median
       varName = formula[pos]
-      data = model$data
       data = data[,varName]
       if(!is.numeric(data)){
         stop("Cannot callculted the median of a non numeric variable")
@@ -308,8 +305,7 @@ getNames = function(names,position){
   return(result)
 }
 
-getLabel = function(model,varName,pos){
-  data = model$data
+getLabel = function(model,varName,pos,data){
   data = data[,grep(varName,colnames(data),value=T)[1]]
   labels = levels(data)
   return(labels[pos])
