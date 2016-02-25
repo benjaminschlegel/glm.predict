@@ -1,4 +1,4 @@
-ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95){
+ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95, sigma=NULL){
   
   # check for correct imput
   if(length(v1) != length(v2) & length(v2) != length(coefficients(model))){
@@ -8,7 +8,9 @@ ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95
   # initialize variables
   l = length(v1)
   n = sim.count
-  sigma = vcov(model)
+  if(is.null(sigma)){
+    sigma = vcov(model)
+  }
   level.count = length(model$lev)
   kappa.count = level.count - 1
   

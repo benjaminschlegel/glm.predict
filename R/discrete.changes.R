@@ -1,4 +1,4 @@
-discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=0.95){
+discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=0.95, sigma=NULL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -113,7 +113,7 @@ discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=
         pos = pos + 2
       }
     }
-    subresult = discrete.change(model,row.values1,row.values2,sim.count,conf.int)
+    subresult = discrete.change(model,row.values1,row.values2,sim.count,conf.int,sigma)
     
     result[r,]$mean1 = subresult[1,1]
     result[r,]$mean2 = subresult[2,1]

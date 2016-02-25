@@ -1,4 +1,4 @@
-nominal_discrete.changes = function(model, values, data, position=1, sim.count=1000, conf.int=0.95){
+nominal_discrete.changes = function(model, values, data, position=1, sim.count=1000, conf.int=0.95, sigma=NULL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -120,7 +120,7 @@ nominal_discrete.changes = function(model, values, data, position=1, sim.count=1
         pos = pos + 2
       }
     }
-    subresult = nominal_discrete.change(model,row.values1,row.values2,sim.count,conf.int)
+    subresult = nominal_discrete.change(model,row.values1,row.values2,sim.count,conf.int,sigma)
     
       for(k in 1:n.levels){
         current.row = (r-1)*n.levels + k

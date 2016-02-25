@@ -10,7 +10,7 @@ a range of cases with the confidence interval. It can be used for a multinom
 model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
-nominal_discrete.changes(model, values, data, position=1, sim.count=1000, conf.int=0.95)
+nominal_discrete.changes(model, values, data, position=1, sim.count=1000, conf.int=0.95, sigma=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -47,6 +47,9 @@ OPTIONAL numbers of simulations to be done by the function. default: 1000
 }
   \item{conf.int}{
 OPTIONAL the confidence interval used by the function. default: 0.95
+}
+  \item{sigma}{
+OPTIONAL the variance-covairance matrix, can be changed when having for exaple robust or clustered vcov. default: vcov(model)
 }
 }
 \details{

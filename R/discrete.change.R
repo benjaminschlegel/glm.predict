@@ -1,5 +1,5 @@
 discrete.change <-
-function(model,values1,values2,sim.count=1000,conf.int=0.95){
+function(model,values1,values2,sim.count=1000,conf.int=0.95,sigma=NULL){
   
   # model type
   model.type = family(model)
@@ -7,7 +7,9 @@ function(model,values1,values2,sim.count=1000,conf.int=0.95){
   
   n = sim.count
   mu = coef(model)
-  sigma = vcov(model)
+  if(is.null(sigma)){
+    sigma = vcov(model)
+  }
   sim = MASS::mvrnorm(n, mu, sigma)
   size = length(values1)
   
