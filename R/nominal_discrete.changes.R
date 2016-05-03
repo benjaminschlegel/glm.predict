@@ -331,8 +331,8 @@ getNames = function(names,position){
 }
 
 getLabel_nominal = function(model,varName,pos,data){
-  data = data[,grep(varName,colnames(data),value=T)[1]]
-  labels = levels(data)
+  data.v = data[,grep(varName,colnames(data),value=T)[1]]
+  labels = levels(data.v)
   return(labels[pos])
 }
 

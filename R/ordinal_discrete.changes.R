@@ -338,8 +338,8 @@ getNames = function(names,position){
 
 getLabel_ordinal = function(model,varName,pos){
   data = model$model
-  data = data[,grep(varName,colnames(data),value=T)[1]]
-  labels = levels(data)
+  data.v = data[,grep(varName,colnames(data),value=T)[1]]
+  labels = levels(data.v)
   return(labels[pos])
 }
 
