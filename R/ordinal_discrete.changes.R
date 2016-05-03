@@ -183,14 +183,14 @@ getValues_ordinal = function(model,values,formula){
       varName = formula[pos]
       if(!is.null(model$model)){
         data = model$model
-        data = data[,grep(varName,colnames(data),value=T)[1]]
-        mode = Mode(data,na.rm=T)
+        data.v = data[,grep(varName,colnames(data),value=T)[1]]
+        mode = Mode(data.v,na.rm=T)
         if(is.numeric(mode)){
           current.values = mode
         }else{
-          n = length(levels(data))
+          n = length(levels(data.v))
           dummies = getDummies(n)
-          current.values = matrix(dummies[which(levels(data)==mode),],nrow=1)
+          current.values = matrix(dummies[which(levels(data.v)==mode),],nrow=1)
           is.factor[pos] = T
         }
       }
@@ -198,48 +198,48 @@ getValues_ordinal = function(model,values,formula){
     else if(grepl("^mean$",value,ignore.case = TRUE)){ # mean
       varName = formula[pos]
       data = model$model
-      data = data[,varName]
+      data.v = data[,varName]
       if(!is.numeric(data)){
         stop("Cannot calculate the mean of a non numeric variable")
       }
-      current.values = mean(data, na.rm=T)
+      current.values = mean(data.v, na.rm=T)
     } # mean
     else if(grepl("^median$",value,ignore.case = TRUE)){ # median
       varName = formula[pos]
       data = model$model
-      data = data[,varName]
-      if(!is.numeric(data)){
+      data.v = data[,varName]
+      if(!is.numeric(data.v)){
         stop("Cannot calculate the median of a non numeric variable")
       }
-      current.values = median(data, na.rm=T)
+      current.values = median(data.v, na.rm=T)
     } # median
     else if(grepl("^Q[0-9]+$",value,ignore.case = TRUE)){ # quantile
       n.quantile = as.numeric(unlist(strsplit(value,"[Q\\]")))[2]
       varName = formula[pos]
       data = model$model
-      data = data[,varName]
-      if(!is.numeric(data)){
+      data.v = data[,varName]
+      if(!is.numeric(data.v)){
         stop("Cannot calculate the quantiles of a non numeric variable")
       }
-      current.values = quantile(data,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = T)
+      current.values = quantile(data.v,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = T)
     } # quantile
     else if(grepl("^min$",value,ignore.case = TRUE)){ # min
       varName = formula[pos]
       data = model$model
-      data = data[,varName]
-      if(!is.numeric(data)){
+      data.v = data[,varName]
+      if(!is.numeric(data.v)){
         stop("Cannot calculate the minimum of a non numeric variable")
       }
-      current.values = min(data,na.rm = T)
+      current.values = min(data.v,na.rm = T)
     } # min
     else if(grepl("^max$",value,ignore.case = TRUE)){ # max
       varName = formula[pos]
       data = model$model
-      data = data[,varName]
-      if(!is.numeric(data)){
+      data.v = data[,varName]
+      if(!is.numeric(data.v)){
         stop("Cannot calculate the maximum of a non numeric variable")
       }
-      current.values = max(data,na.rm = T)
+      current.values = max(data.v,na.rm = T)
     } # max
     else if(grepl("^F[0-9]+\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
@@ -254,15 +254,15 @@ getValues_ordinal = function(model,values,formula){
       current.values = getDummies(n)
       is.factor[pos] = T
     } # factor
-    else if(grepl("^[0-9\\.]+-[0-9\\.]+,[0-9[:punct:]]+$",value)){ # from-to,by
+    else if(grepl("^([0-9]+(\\.[0-9]+)?)-([0-9]+(\\.[0-9]+)?),([0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
       components = as.numeric(unlist(strsplit(value,"[-,]")))
       current.values = seq(from=components[1],to=components[2],by=components[3])
     } # from-to,by
-    else if(grepl("^[0-9]+-[0-9]+$",value)){ # from-to
+    else if(grepl("^([0-9]+(\\.[0-9]+)?)-([0-9]+(\\.[0-9]+)?)$",value)){ # from-to
       components = unlist(strsplit(value,"-"))
       current.values = components[1]:components[2]
     } # from-to
-    else if(grepl("^[0-9]+(,[0-9]+)*$",value)){ # value1[, value2 [, ...]]
+    else if(grepl("^([0-9]+(\\.[0-9]+)?)(,[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
       current.values = as.numeric(unlist(strsplit(value,",")))
     } # value1[, value2 [, ...]]
     else { # invalid syntax
