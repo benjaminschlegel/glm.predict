@@ -187,7 +187,7 @@ getValues = function(model,values,formula){
     else if(grepl("^mean$",value,ignore.case = TRUE)){ # mean
       varName = formula[pos]
       data.v = model$data
-      data.v = data[,varName]
+      data.v = data.v[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the mean of a non numeric variable")
       }
