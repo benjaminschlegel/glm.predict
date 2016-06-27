@@ -248,11 +248,7 @@ getValues_nominal = function(model,values,formula,data){
       current.values = getDummies(n)
       is.factor[pos] = T
     } # factor
-<<<<<<< HEAD
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
-=======
-    else if(grepl("^([0-9]+(\\.[0-9]+)?)-([0-9]+(\\.[0-9]+)?),([0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
->>>>>>> origin/master
       components = as.numeric(unlist(strsplit(value,"[-,]")))
 		i.container = c()
 		for(i in 1:length(components)){
@@ -264,11 +260,7 @@ getValues_nominal = function(model,values,formula,data){
 		components = components[-i.container]
       current.values = seq(from=components[1],to=components[2],by=components[3])
     } # from-to,by
-<<<<<<< HEAD
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to
-=======
-    else if(grepl("^([0-9]+(\\.[0-9]+)?)-([0-9]+(\\.[0-9]+)?)$",value)){ # from-to
->>>>>>> origin/master
       components = unlist(strsplit(value,"-"))
 		i.container = c()
 		for(i in 1:length(components)){
@@ -280,11 +272,7 @@ getValues_nominal = function(model,values,formula,data){
 		components = components[-i.container]
       current.values = components[1]:components[2]
     } # from-to
-<<<<<<< HEAD
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
-=======
-    else if(grepl("^([0-9]+(\\.[0-9]+)?)(,[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
->>>>>>> origin/master
       current.values = as.numeric(unlist(strsplit(value,",")))
     } # value1[, value2 [, ...]]
     else { # invalid syntax
