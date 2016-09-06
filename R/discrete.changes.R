@@ -252,7 +252,9 @@ getValues = function(model,values,formula){
 			i.container = c(i.container,i)
 		  }
 		}
-		components = components[-i.container]
+		if(length(i.container)>0){
+		  components = components[-i.container]
+		}
       current.values = seq(from=components[1],to=components[2],by=components[3])
     } # from-to,by
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to
@@ -264,7 +266,9 @@ getValues = function(model,values,formula){
 			i.container = c(i.container,i)
 		  }
 		}
-		components = components[-i.container]
+		if(length(i.container)>0){
+		  components = components[-i.container]
+		}
       current.values = components[1]:components[2]
     } # from-to
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
