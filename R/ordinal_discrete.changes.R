@@ -199,7 +199,7 @@ getValues_ordinal = function(model,values,formula){
       varName = formula[pos]
       data = model$model
       data.v = data[,varName]
-      if(!is.numeric(data)){
+      if(!is.numeric(data.v)){
         stop("Cannot calculate the mean of a non numeric variable")
       }
       current.values = mean(data.v, na.rm=T)

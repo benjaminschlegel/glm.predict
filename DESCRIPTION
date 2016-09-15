@@ -1,8 +1,8 @@
 Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM (glm,polr,multinom)
-Version: 2.2-4
-Date: 2016-09-06
+Version: 2.2-5
+Date: 2016-09-15
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
 Description: This package provides functions to calculate predicted values and the difference between the two cases with confidence interval.
