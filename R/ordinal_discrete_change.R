@@ -46,7 +46,7 @@ ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95
         if(j == 1){
           ev[i,j+(k-1)*level.count] = exp(kappa[[j]][i,]-b[i,]%*%x[[k]])/(1+exp(kappa[[j]][i,]-b[i,]%*%x[[k]]))
         }else if(j == level.count){
-          ev[i,j+(k-1)*level.count] = 1/exp(kappa[[j-1]][i,]-b[i,]%*%x[[k]])
+          ev[i,j+(k-1)*level.count] = 1/(1+exp(kappa[[j-1]][i,]-b[i,]%*%x[[k]]))
         }else{
           ev[i,j+(k-1)*level.count] = exp(kappa[[j]][i,]-b[i,]%*%x[[k]])/(1+exp(kappa[[j]][i,]-b[i,]%*%x[[k]])) -
             exp(kappa[[j-1]][i,]-b[i,]%*%x[[k]])/(1+exp(kappa[[j-1]][i,]-b[i,]%*%x[[k]]))
