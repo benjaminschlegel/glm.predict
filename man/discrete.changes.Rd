@@ -30,8 +30,8 @@ from-to,by: takes all values from "from" to "to" with the distance "by" (for exa
 from-to: same as from-to,by with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8) - 
 value1,value2,value3,...: takes the given values (for example: "160,180" --> 160,180) - 
 value1: takes the given value (for example: "5.34" --> 5.34) -
-"F4": takes all values of a factor with four levels (put as number the number of levels the factor has) -
-"F5(2)": takes the second level of a factor with five levels (put as first number the number of levels the factor has) -
+"F": takes all values of a factor -
+"F(2)": takes the second level of a factor -
 }
 
   \item{position}{
@@ -64,7 +64,7 @@ model1 = glm(Sex ~ Height + Smoke + Pulse, data=MASS::survey, family=binomial(li
 summary(model1)
 # comparing person with hight 150 to 160, 160 to 170, 170 to 180, 180 to 190 
 # with all combination of(non-)smokers and a median of pulse 
-discrete.changes(model1, "150-190,10;F4;median")
+discrete.changes(model1, "150-190,10;F;median")
 }
 
 \keyword{ models }

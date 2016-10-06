@@ -235,16 +235,35 @@ getValues_nominal = function(model,values,formula,data){
       }
       current.values = max(data.v,na.rm = T)
     } # max
-    else if(grepl("^F[0-9]+\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
+	else if(grepl("^F[0-9]+\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor (old version)
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
       n = components[2]
       x = components[3]
       dummies = getDummies(n)
       current.values = matrix(dummies[x,],nrow=1)
       is.factor[pos] = T
+    } # single factor value (old version)
+    else if(grepl("^F\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
+      components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
+      data = model$data
+      varName = formula[pos]
+      data.v = data[,varName]
+      n = length(levels(data.v))
+      x = components[3]
+      dummies = getDummies(n)
+      current.values = matrix(dummies[x,],nrow=1)
+      is.factor[pos] = T
     } # single factor value
-    else if(grepl("^F[0-9]+$",value,ignore.case = TRUE)){ # factor
+    else if(grepl("^F[0-9]+$",value,ignore.case = TRUE)){ # factor (old version)
       n = as.numeric(unlist(strsplit(value,"F")))[2]
+      current.values = getDummies(n)
+      is.factor[pos] = T
+    } # factor (old version)
+    else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
+      data = model$data
+      varName = formula[pos]
+      data.v = data[,varName]
+      n = length(levels(data.v))
       current.values = getDummies(n)
       is.factor[pos] = T
     } # factor
