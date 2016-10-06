@@ -15,7 +15,7 @@ discrete.change(model, values1, values2, sim.count=1000, conf.int=0.95, sigma=NU
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{model}{
-the glm-Object generated with glm()
+the glm-Object generated with glm() or glm.nb()
 }
   \item{values1}{
 the values of case 1 as vector in the order how they appear in the summary(model) Estimate

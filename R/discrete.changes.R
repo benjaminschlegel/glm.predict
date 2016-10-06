@@ -170,8 +170,12 @@ getValues = function(model,values,formula){
   for(value in values.vector){
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       varName = formula[pos]
-      if(!is.null(model$data)){
-        data = model$data
+      if(!is.null(model$data) || !is.null(model$model)){
+        if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+          data = model$model
+        }else{
+          data = model$data
+        }
         data.v = data[,grep(varName,colnames(data),value=T)[1]]
         mode = Mode(data.v,na.rm=T)
         if(is.numeric(mode)){
@@ -186,7 +190,11 @@ getValues = function(model,values,formula){
     } # mode
     else if(grepl("^mean$",value,ignore.case = TRUE)){ # mean
       varName = formula[pos]
-      data.v = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       data.v = data.v[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the mean of a non numeric variable")
@@ -195,7 +203,11 @@ getValues = function(model,values,formula){
     } # mean
     else if(grepl("^median$",value,ignore.case = TRUE)){ # median
       varName = formula[pos]
-      data = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       data.v = data[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the median of a non numeric variable")
@@ -205,7 +217,11 @@ getValues = function(model,values,formula){
     else if(grepl("^Q[0-9]+$",value,ignore.case = TRUE)){ # quantile
       n.quantile = as.numeric(unlist(strsplit(value,"[Q\\]")))[2]
       varName = formula[pos]
-      data = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       data.v = data[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the quantiles of a non numeric variable")
@@ -214,7 +230,11 @@ getValues = function(model,values,formula){
     } # quantile
     else if(grepl("^min$",value,ignore.case = TRUE)){ # min
       varName = formula[pos]
-      data = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       data.v = data[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the minimum of a non numeric variable")
@@ -223,7 +243,11 @@ getValues = function(model,values,formula){
     } # min
     else if(grepl("^max$",value,ignore.case = TRUE)){ # max
       varName = formula[pos]
-      data = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       data.v = data[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the maximum of a non numeric variable")
@@ -240,7 +264,11 @@ getValues = function(model,values,formula){
     } # single factor value (old version)
     else if(grepl("^F\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
-      data = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       varName = formula[pos]
       data.v = data[,varName]
       n = length(levels(data.v))
@@ -255,7 +283,11 @@ getValues = function(model,values,formula){
       is.factor[pos] = T
     } # factor (old version)
     else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
-      data = model$data
+      if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+        data = model$model
+      }else{
+        data = model$data
+      }
       varName = formula[pos]
       data.v = data[,varName]
       n = length(levels(data.v))
@@ -264,25 +296,25 @@ getValues = function(model,values,formula){
     } # factor
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
       components = as.numeric(unlist(strsplit(value,"[-,]")))
-		i.container = c()
-		for(i in 1:length(components)){
-		  if(components[i]==""){
-			components[i+1] = paste0("-",components[i+1])
-			i.container = c(i.container,i)
-		  }
-		}
-		if(length(i.container)>0){
-		  components = components[-i.container]
-		}
+  		i.container = c()
+  		for(i in 1:length(components)){
+  		  if(components[i]==""){
+  			components[i+1] = paste0("-",components[i+1])
+  			i.container = c(i.container,i)
+  		  }
+  		}
+  		if(length(i.container)>0){
+  		  components = components[-i.container]
+  		}
       current.values = seq(from=components[1],to=components[2],by=components[3])
     } # from-to,by
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to
       components = unlist(strsplit(value,"-"))
-		i.container = c()
-		for(i in 1:length(components)){
-		  if(components[i]==""){
-			components[i+1] = paste0("-",components[i+1])
-			i.container = c(i.container,i)
+  		i.container = c()
+  		for(i in 1:length(components)){
+  		  if(components[i]==""){
+  			components[i+1] = paste0("-",components[i+1])
+  			i.container = c(i.container,i)
 		  }
 		}
 		if(length(i.container)>0){
@@ -365,7 +397,11 @@ getNames = function(names,position){
 }
 
 getLabel = function(model,varName,pos){
-  data = model$data
+  if(grepl("^negative binomial.*$",model$family$family,ignore.case = T)){
+    data = model$model
+  }else{
+    data = model$data
+  }
   data.v = data[,grep(varName,colnames(data),value=T)[1]]
   labels = levels(data.v)
   return(labels[pos])
