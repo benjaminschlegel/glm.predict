@@ -1,4 +1,4 @@
-nominal_discrete.change = function(model,v1,v2,sim.count=1000,conf.int=0.95,sigma=NULL){
+nominal_discrete.change = function(model,values1,values2,sim.count=1000,conf.int=0.95,sigma=NULL){
   mu = coef(model)
   if(is.null(sigma)){
     sigma = vcov(model)
@@ -18,8 +18,8 @@ nominal_discrete.change = function(model,v1,v2,sim.count=1000,conf.int=0.95,sigm
       sim[j,] = MASS::mvrnorm(mu=mu[j,],Sigma=sigma[(n.coefs*(j-1)+1):(n.coefs*j),(n.coefs*(j-1)+1):(n.coefs*j)])
     }
     
-    x[,1] = c(0,sim %*% v1)
-    x[,2] = c(0,sim %*% v2)
+    x[,1] = c(0,sim %*% values1)
+    x[,2] = c(0,sim %*% values2)
     
     e = exp(x)
     

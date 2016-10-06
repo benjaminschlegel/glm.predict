@@ -1,12 +1,12 @@
-ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95, sigma=NULL){
+ordinal_discrete.change = function(model,values1,values2,sim.count = 1000, conf.int = 0.95, sigma=NULL){
   
   # check for correct imput
-  if(length(v1) != length(v2) & length(v2) != length(coefficients(model))){
-    stop("v1 or v2 have different length then coef")
+  if(length(values1) != length(values2) & length(values2) != length(coefficients(model))){
+    stop("values1 or values2 have different length then coef")
   }
   
   # initialize variables
-  l = length(v1)
+  l = length(values1)
   n = sim.count
   if(is.null(sigma)){
     sigma = vcov(model)
@@ -15,8 +15,8 @@ ordinal_discrete.change = function(model,v1,v2,sim.count = 1000, conf.int = 0.95
   kappa.count = level.count - 1
   
   x = list()
-  x[[1]] = matrix(v1,nrow=l,ncol=1,byrow=T) 
-  x[[2]] = matrix(v2,nrow=l,ncol=1,byrow=T)
+  x[[1]] = matrix(values1,nrow=l,ncol=1,byrow=T) 
+  x[[2]] = matrix(values2,nrow=l,ncol=1,byrow=T)
   
   draw = matrix(NA,nrow=n,ncol=l+kappa.count,byrow=T)
   beta = matrix(coef(model),nrow=1,ncol=l,byrow=T)

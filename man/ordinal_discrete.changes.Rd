@@ -10,7 +10,8 @@ a range of cases with the confidence interval. It can be used for a polr
 model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
-ordinal_discrete.changes(model, values, position=1, sim.count=1000, conf.int=0.95,sigma=NULL)
+ordinal_discrete.changes(model, values, position=1, 
+  sim.count=1000, conf.int=0.95,sigma=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
