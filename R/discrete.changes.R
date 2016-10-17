@@ -195,7 +195,7 @@ getValues = function(model,values,formula){
       }else{
         data = model$data
       }
-      data.v = data.v[,varName]
+      data.v = data[,varName]
       if(!is.numeric(data.v)){
         stop("Cannot calculate the mean of a non numeric variable")
       }
