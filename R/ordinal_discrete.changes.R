@@ -251,7 +251,7 @@ getValues_ordinal = function(model,values,formula){
     } # single factor value (old version)
     else if(grepl("^F\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
-      data = model$data
+      data = model$model
       varName = formula[pos]
       data.v = data[,varName]
       n = length(levels(data.v))
@@ -266,7 +266,7 @@ getValues_ordinal = function(model,values,formula){
       is.factor[pos] = T
     } # factor (old version)
     else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
-      data = model$data
+      data = model$model
       varName = formula[pos]
       data.v = data[,varName]
       n = length(levels(data.v))

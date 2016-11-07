@@ -245,7 +245,6 @@ getValues_nominal = function(model,values,formula,data){
     } # single factor value (old version)
     else if(grepl("^F\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
-      data = model$data
       varName = formula[pos]
       data.v = data[,varName]
       n = length(levels(data.v))
@@ -260,7 +259,6 @@ getValues_nominal = function(model,values,formula,data){
       is.factor[pos] = T
     } # factor (old version)
     else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
-      data = model$data
       varName = formula[pos]
       data.v = data[,varName]
       n = length(levels(data.v))
