@@ -1,16 +1,15 @@
-\name{nominal_discrete.changes}
-\alias{nominal_discrete.changes}
+\name{multinom.predicts}
+\alias{multinom.predicts}
 
 \title{
-predicted values and discrete changes for multinom models
+predicted values for multinom models
 }
 \description{
-The function calculates the predicted values and the difference of
-a range of cases with the confidence interval. It can be used for a multinom
+The function calculates the predicted values with the confidence interval. It can be used for a multinom
 model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
-nominal_discrete.changes(model, values, data, position=1,
+multinom.predicts(model, values, data,
   sim.count=1000, conf.int=0.95, sigma=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -37,10 +36,6 @@ value1: takes the given value (for example: "5.34" --> 5.34) -
 
   \item{data}{
 data.frame used to estimate the model
-}
-
-  \item{position}{
-OPTIONAL which variable should be taken for the discrete change, the variable must have at least two values. default: 1
 }
 
   \item{sim.count}{
@@ -71,7 +66,7 @@ model1 = nnet::multinom(Clap ~ Sex + Height, data=data)
 summary(model1)
 # comparing a woman to a man
 # with the values 160, 170, 180 and 190 for the height
-nominal_discrete.changes(model1, "0-1;160-190,10", data)
+multinom.predicts(model1, "0-1;160-190,10", data)
 }
 
 \keyword{ models }

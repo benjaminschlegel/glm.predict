@@ -1,15 +1,14 @@
-\name{nominal_discrete.change}
-\alias{nominal_discrete.change}
+\name{multinom.predict}
+\alias{multinom.predict}
 
 \title{
-predicted values and discrete change for multinom
+predicted value for multinom
 }
 \description{
-The function calculates the predicted values and the difference of
-two cases with the confidence interval. It can be used for a mutinom model.
+The function calculates the predicted value with the confidence interval. It can be used for a mutinom model.
 }
 \usage{
-nominal_discrete.change(model, values1, values2, 
+multinom.predict(model, values, 
   sim.count=1000, conf.int=0.95, sigma=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,11 +16,8 @@ nominal_discrete.change(model, values1, values2,
   \item{model}{
 the multinom-Object generated with multinom() from package nnet
 }
-  \item{values1}{
-the values of case 1 as vector in the order how they appear in the summary(model) Estimate
-}
-  \item{values2}{
-the values of case 2 as vector in the order how they appear in the summary(model) Estimate
+  \item{values}{
+the values of the case as vector in the order how they appear in the summary(model) Estimate
 }
   \item{sim.count}{
 OPTIONAL numbers of simulations to be done by the function. default: 1000
@@ -37,7 +33,7 @@ OPTIONAL the variance-covairance matrix, can be changed when having for exaple r
   The function makes a simulation for the two cases and compares them to each other. 
 }
 \value{
-  The output is a nx9 matrix with the levels as rows and the different results as columns.
+  The output is a nx3 matrix with the levels as rows and the different results as columns.
 }
 
 \author{
@@ -50,8 +46,7 @@ data$Clap = relevel(data$Clap,ref="Neither")
 model1 = nnet::multinom(Clap ~ Sex + Height, data=data)
 summary(model1)
 # comparing a man to a woman
-nominal_discrete.change(model1, c(1,1,170),
-  c(1,0,170),sim.count=10000)
+multinom.predict(model1, c(1,1,170),sim.count=10000)
 }
 
 \keyword{ models }

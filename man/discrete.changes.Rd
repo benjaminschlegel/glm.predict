@@ -5,7 +5,7 @@
 predicted values and discrete change
 }
 \description{
-The function calcultes the predicted values and the difference of
+The function calculates the predicted values and the difference of
 a range of cases with the confidence interval. It can be used for any
 glm model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
