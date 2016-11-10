@@ -3,6 +3,8 @@ multinom.predicts = function(model, values, data, sim.count=1000, conf.int=0.95,
     stop("values must be given as character!")
   }
   
+  values = gsub("\\s","",values)
+  
   # check if any interaction
   formula = getFormulas(model) # variable names [[1]] and interaction positions[[2]]
   

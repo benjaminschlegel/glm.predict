@@ -3,6 +3,8 @@ discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=
     stop("values must be given as character!")
   }
   
+  values = gsub("\\s","",values)
+  
   # check if any interaction
   formula = getFormulas(model) # variable names [[1]] and interaction positions[[2]]
   
