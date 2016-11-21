@@ -1,5 +1,5 @@
-\name{glm.predict}
-\alias{glm.predict}
+\name{glm.predict_}
+\alias{glm.predict_}
 
 \title{
 predicted value
@@ -9,7 +9,7 @@ The function calculates the predicted value with the confidence interval. It can
 glm model.
 }
 \usage{
-glm.predict(model, values, sim.count=1000, conf.int=0.95, sigma=NULL)
+glm.predict_(model, values, sim.count=1000, conf.int=0.95, sigma=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -46,7 +46,7 @@ OPTIONAL the variance-covairance matrix, can be changed when having for exaple r
 model1 = glm(Sex ~ Height + Smoke + Pulse, data=MASS::survey, family=binomial(link=logit))
 summary(model1)
 # comparing a person with the height 150cm to 151cm
-glm.predict(model1, c(1,150,1,0,0,mean(MASS::survey$Pulse,na.rm=TRUE)))
+glm.predict_(model1, c(1,150,1,0,0,mean(MASS::survey$Pulse,na.rm=TRUE)))
 }
 
 \keyword{ models }

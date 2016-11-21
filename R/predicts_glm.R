@@ -69,7 +69,7 @@ glm.predicts = function(model, values, sim.count=1000, conf.int=0.95, sigma=NULL
       if(ia==1){ # *
         if(is.factor[pos]){
           n.dummies = length(values.list[[pos]][1,])
-          term.part1.v = row.values1[pos.row.values:(pos.row.values+n.dummies-1)]
+          term.part1.v = row.values[pos.row.values:(pos.row.values+n.dummies-1)]
           pos.row.values = pos.row.values + n.dummies
         }else{
           term.part1.v = row.values[pos.row.values]
@@ -87,7 +87,7 @@ glm.predicts = function(model, values, sim.count=1000, conf.int=0.95, sigma=NULL
         pos = pos + 2
       }
     }
-    subresult = glm.predict(model,row.values,sim.count,conf.int,sigma)
+    subresult = glm.predict_(model,row.values,sim.count,conf.int,sigma)
     
     result[r,]$mean = subresult[1,1]
     result[r,]$lower = subresult[1,2]
