@@ -20,18 +20,21 @@ the glm-Object generated with glm() or glm.nb()
   \item{values}{
 the values of cases as character in the order how they appear in the summary(model) Estimate
 The values must be in the following way: "value1;value2;value3;...". Each one of the value can be obe of the following:
-"mean": takes the mean of that variable (can only be used when the variable is numeric) - 
-"median": takes the median of that variable (can only be used when the variable is numeric) - 
-"mode": takes the mode of that variable - 
-"Q4": takes the quartiles (0,0.25,0.5,0.75,1) of that variable (other number for other quantiles) -
-"min": takes the mimimum of that variable - 
-"max": takes the maximum of that variable - 
-from-to,by: takes all values from "from" to "to" with the distance "by" (for example: "160-180,5" --> 160,165,170,175,180) - 
-from-to: same as from-to,by with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8) - 
-value1,value2,value3,...: takes the given values (for example: "160,180" --> 160,180) - 
-value1: takes the given value (for example: "5.34" --> 5.34) -
-"F": takes all values of a factor -
-"F(2)": takes the second level of a factor -
+
+\enumerate{
+	\item "mean": takes the mean of that variable (can only be used when the variable is numeric)
+	\item "median": takes the median of that variable (can only be used when the variable is numeric)
+	\item "mode": takes the mode of that variable
+	\item "Q4": takes the quartiles (0,0.25,0.5,0.75,1) of that variable (other number for other quantiles)
+	\item "min": takes the mimimum of that variable
+	\item "max": takes the maximum of that variable
+	\item from-to,by: takes all values from "from" to "to" with the distance "by" (for example: "160-180,5" --> 160,165,170,175,180)
+	\item from-to: same as from-to,by with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8)
+	\item value1,value2,value3,...: takes the given values (for example: "160,180" --> 160,180)
+	\item value1: takes the given value (for example: "5.34" --> 5.34)
+	\item "F": takes all values of a factor/character
+	\item "F(2)": takes the second level of a factor/character
+}
 }
 
   \item{position}{

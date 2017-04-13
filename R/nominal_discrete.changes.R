@@ -189,7 +189,7 @@ getValues_nominal = function(model,values,formula,data){
         if(is.numeric(mode)){
           current.values = mode
         }else{
-          n = length(levels(data.v))
+          n = length(levels(as.factor(as.character(data.v))))
           dummies = getDummies(n)
           current.values = matrix(dummies[which(levels(data.v)==mode),],nrow=1)
           is.factor[pos] = T
@@ -249,7 +249,7 @@ getValues_nominal = function(model,values,formula,data){
       components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
       varName = formula[pos]
       data.v = data[,varName]
-      n = length(levels(data.v))
+      n = length(levels(as.factor(as.character(data.v))))
       x = components[3]
       dummies = getDummies(n)
       current.values = matrix(dummies[x,],nrow=1)
@@ -263,7 +263,7 @@ getValues_nominal = function(model,values,formula,data){
     else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
       varName = formula[pos]
       data.v = data[,varName]
-      n = length(levels(data.v))
+      n = length(levels(as.factor(as.character(data.v))))
       current.values = getDummies(n)
       is.factor[pos] = T
     } # factor
@@ -371,7 +371,7 @@ getNames_dc = function(names,position){
 
 getLabel_nominal = function(model,varName,pos,data){
   data.v = data[,grep(varName,colnames(data),value=T)[1]]
-  labels = levels(data.v)
+  labels = levels(as.factor(as.character(data.v)))
   return(labels[pos])
 }
 

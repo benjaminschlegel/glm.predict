@@ -18,44 +18,10 @@ function(model,values1,values2,sim.count=1000,conf.int=0.95,sigma=NULL){
   
   v = cbind(values1,values2)
   ev = cbind(rep(NA,n),rep(NA,n))
-  
-  
-  for(i in 1:n){
-    x = c(NA,NA)
-    for(j in 1:2){
-      x[j] = sum(sim[i,]%*%v[,j])
 
-      # the inverse link functions
-      if(link == "logit"){
-        ev[i, j] = exp(x[j])/(1+exp(x[j]))
-      }
-      if(link == "log"){
-        ev[i, j] = exp(x[j])
-      }
-      if(link == "identity"){
-        ev[i, j] = x[j]
-      }
-      if(link == "probit"){ 
-        ev[i, j] = pnorm(x[j])
-      }
-      if(link == "cauchit"){
-        ev[i, j] = tan(pi*(x[j]-0.5))
-      }
-      if(link == "cloglog"){
-        ev[i, j] = exp(-exp(x[j]))*(-1+exp(exp(x[j])))
-      }
-      if(link == "sqrt"){
-        ev[i, j] = x[j]*x[j]
-      }
-      if(link == "1/mu^2"){
-        ev[i, j] = 1/sqrt(x[j])
-      }
-      if(link == "inverse"){
-        ev[i,j] = 1/x[j]
-      }
-    }
-  }
-  
+  ev[,1] = sapply(1:n,simu.glm,j=1,sim=sim,v=v)
+  ev[,2] = sapply(1:n,simu.glm,j=2,sim=sim,v=v)
+
   diff = matrix(1:n,n)
   diff = ev[,1]-ev[,2]
   
@@ -73,4 +39,38 @@ function(model,values1,values2,sim.count=1000,conf.int=0.95,sigma=NULL){
   rownames(results) = c("Case 1","Case 2","Difference")
   
   return(results)
+}
+
+simu.glm = function(i,j,sim,v){
+  x = c(NA,NA)
+  x[j] = sum(sim[i,]%*%v[,j])
+  
+  # the inverse link functions
+  if(link == "logit"){
+    return(exp(x[j])/(1+exp(x[j])))
+  }
+  if(link == "log"){
+    return(exp(x[j]))
+  }
+  if(link == "identity"){
+    return(x[j])
+  }
+  if(link == "probit"){ 
+    return(pnorm(x[j]))
+  }
+  if(link == "cauchit"){
+    return(tan(pi*(x[j]-0.5)))
+  }
+  if(link == "cloglog"){
+    return(exp(-exp(x[j]))*(-1+exp(exp(x[j]))))
+  }
+  if(link == "sqrt"){
+    return(x[j]*x[j])
+  }
+  if(link == "1/mu^2"){
+    return(1/sqrt(x[j]))
+  }
+  if(link == "inverse"){
+    return(1/x[j])
+  }  
 }
