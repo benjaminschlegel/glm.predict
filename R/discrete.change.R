@@ -19,8 +19,8 @@ function(model,values1,values2,sim.count=1000,conf.int=0.95,sigma=NULL){
   v = cbind(values1,values2)
   ev = cbind(rep(NA,n),rep(NA,n))
 
-  ev[,1] = sapply(1:n,simu.glm,j=1,sim=sim,v=v)
-  ev[,2] = sapply(1:n,simu.glm,j=2,sim=sim,v=v)
+  ev[,1] = sapply(1:n,simu.glm,j=1,sim=sim,v=v,link=link)
+  ev[,2] = sapply(1:n,simu.glm,j=2,sim=sim,v=v,link=link)
 
   diff = matrix(1:n,n)
   diff = ev[,1]-ev[,2]
@@ -41,7 +41,7 @@ function(model,values1,values2,sim.count=1000,conf.int=0.95,sigma=NULL){
   return(results)
 }
 
-simu.glm = function(i,j,sim,v){
+simu.glm = function(i,j,sim,v,link){
   x = c(NA,NA)
   x[j] = sum(sim[i,]%*%v[,j])
   
