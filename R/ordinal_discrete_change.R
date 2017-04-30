@@ -1,4 +1,4 @@
-ordinal_discrete.change = function(model,values1,values2,sim.count = 1000, conf.int = 0.95, sigma=NULL){
+ordinal_discrete.change = function(model,values1,values2,sim.count = 1000, conf.int = 0.95, sigma=NULL,set.seed=NULL){
   
   # check for correct imput
   if(length(values1) != length(values2) & length(values2) != length(coefficients(model))){
@@ -32,6 +32,9 @@ ordinal_discrete.change = function(model,values1,values2,sim.count = 1000, conf.
   ev = matrix(NA,nrow=n,ncol=2*level.count,byrow=TRUE)
   
   # simulation
+  if(!is.null(set.seed)){
+    set.seed(set.seed)
+  }
   draw[,] = MASS::mvrnorm(n,estim,sigma)
   b[,]<-draw[,1:l]
   for(i in 1:kappa.count){

@@ -1,4 +1,4 @@
-multinom.predict = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL){
+multinom.predict = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL,set.seed=NULL){
   mu = coef(model)
   if(is.null(sigma)){
     sigma = vcov(model)
@@ -11,6 +11,9 @@ multinom.predict = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL
   
   for(i in 1:sim.count){
     for(j in 1:n){
+      if(!is.null(set.seed)){
+        set.seed(set.seed)
+      }
       sim[j,] = MASS::mvrnorm(mu=mu[j,],Sigma=sigma[(n.coefs*(j-1)+1):(n.coefs*j),(n.coefs*(j-1)+1):(n.coefs*j)])
     }
     

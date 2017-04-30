@@ -1,4 +1,4 @@
-polr.predicts = function(model, values, sim.count=1000, conf.int=0.95,sigma=NULL){
+polr.predicts = function(model, values, sim.count=1000, conf.int=0.95,sigma=NULL,set.seed=NUL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -94,7 +94,7 @@ polr.predicts = function(model, values, sim.count=1000, conf.int=0.95,sigma=NULL
         pos = pos + 2
       }
     }
-    subresult = polr.predict(model,row.values,sim.count,conf.int, sigma)
+    subresult = polr.predict(model,row.values,sim.count,conf.int, sigma, set.seed)
     
       for(k in 1:n.levels){
         current.row = (r-1)*n.levels + k

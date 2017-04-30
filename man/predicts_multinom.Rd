@@ -10,7 +10,7 @@ model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *!
 }
 \usage{
 multinom.predicts(model, values, data,
-  sim.count=1000, conf.int=0.95, sigma=NULL)
+  sim.count=1000, conf.int=0.95, sigma=NULL, sed.seed=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -49,6 +49,9 @@ OPTIONAL the confidence interval used by the function. default: 0.95
 }
   \item{sigma}{
 OPTIONAL the variance-covairance matrix, can be changed when having for exaple robust or clustered vcov. default: vcov(model)
+}
+  \item{set.seed}{
+OPTIONAL set a seed for the random number generator
 }
 }
 \details{

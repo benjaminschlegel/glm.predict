@@ -1,4 +1,4 @@
-multinom.predicts = function(model, values, data, sim.count=1000, conf.int=0.95, sigma=NULL){
+multinom.predicts = function(model, values, data, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NUL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -94,7 +94,7 @@ multinom.predicts = function(model, values, data, sim.count=1000, conf.int=0.95,
         pos = pos + 2
       }
     }
-    subresult = multinom.predict(model,row.values,sim.count,conf.int,sigma)
+    subresult = multinom.predict(model,row.values,sim.count,conf.int,sigma,set.seed)
     
       for(k in 1:n.levels){
         current.row = (r-1)*n.levels + k

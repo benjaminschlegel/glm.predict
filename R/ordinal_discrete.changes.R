@@ -1,4 +1,4 @@
-ordinal_discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=0.95,sigma=NULL){
+ordinal_discrete.changes = function(model, values, position=1, sim.count=1000, conf.int=0.95,sigma=NULL,set.seed=NULL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -122,7 +122,7 @@ ordinal_discrete.changes = function(model, values, position=1, sim.count=1000, c
         pos = pos + 2
       }
     }
-    subresult = ordinal_discrete.change(model,row.values1,row.values2,sim.count,conf.int, sigma)
+    subresult = ordinal_discrete.change(model,row.values1,row.values2,sim.count,conf.int, sigma,set.seed)
     
       for(k in 1:n.levels){
         current.row = (r-1)*n.levels + k

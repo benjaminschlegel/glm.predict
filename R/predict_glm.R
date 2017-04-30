@@ -1,5 +1,5 @@
 glm.predict_ <-
-function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL){
+function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL,set.seed=NULL){
   
   # model type
   model.type = family(model)
@@ -9,6 +9,9 @@ function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL){
   mu = coef(model)
   if(is.null(sigma)){
     sigma = vcov(model)
+  }
+  if(!is.null(set.seed)){
+    set.seed(set.seed)
   }
   sim = MASS::mvrnorm(n, mu, sigma)
   size = length(values)

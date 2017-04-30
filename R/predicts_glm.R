@@ -1,4 +1,4 @@
-glm.predicts = function(model, values, sim.count=1000, conf.int=0.95, sigma=NULL){
+glm.predicts = function(model, values, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
@@ -87,7 +87,7 @@ glm.predicts = function(model, values, sim.count=1000, conf.int=0.95, sigma=NULL
         pos = pos + 2
       }
     }
-    subresult = glm.predict_(model,row.values,sim.count,conf.int,sigma)
+    subresult = glm.predict_(model,row.values,sim.count,conf.int,sigma,set.seed)
     
     result[r,]$mean = subresult[1,1]
     result[r,]$lower = subresult[1,2]
