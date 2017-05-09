@@ -1,4 +1,4 @@
-multinom.predicts = function(model, values, data, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NUL){
+multinom.predicts = function(model, values, data, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }

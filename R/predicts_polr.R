@@ -1,4 +1,4 @@
-polr.predicts = function(model, values, sim.count=1000, conf.int=0.95,sigma=NULL,set.seed=NUL){
+polr.predicts = function(model, values, sim.count=1000, conf.int=0.95,sigma=NULL,set.seed=NULL){
   if(!is.character(values)){
     stop("values must be given as character!")
   }
