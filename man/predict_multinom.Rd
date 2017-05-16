@@ -9,7 +9,7 @@ The function calculates the predicted value with the confidence interval. It can
 }
 \usage{
 multinom.predict(model, values, 
-  sim.count=1000, conf.int=0.95, sigma=NULL, sed.seed=NULL)
+  sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

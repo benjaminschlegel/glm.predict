@@ -10,7 +10,7 @@ two cases with the confidence interval. It can be used for a mutinom model.
 }
 \usage{
 nominal_discrete.change(model, values1, values2, 
-  sim.count=1000, conf.int=0.95, sigma=NULL, sed.seed=NULL)
+  sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

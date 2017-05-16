@@ -10,7 +10,7 @@ glm model. - NOTICE: THE FUNCTION DOES NOT WORK WITH : INTERAKTIONS, ONLY WITH *
 }
 \usage{
 glm.predicts(model, values, sim.count=1000, conf.int=0.95, 
-  sigma=NULL, sed.seed=NULL)
+  sigma=NULL, set.seed=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
