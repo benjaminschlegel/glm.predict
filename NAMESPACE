@@ -1,1 +1,2 @@
+import(MASS,nnet,stats)
 export(discrete.change,discrete.changes,ordinal_discrete.change,ordinal_discrete.changes,nominal_discrete.change,nominal_discrete.changes,glm.predict_,glm.predicts,polr.predict,polr.predicts,multinom.predict,multinom.predicts)
