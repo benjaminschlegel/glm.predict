@@ -344,25 +344,6 @@ getProducts_dc = function(value,position){
   return(results)
 }
 
-getDummies = function(n){
-  if(n == 2){
-    return(matrix(0:1,nrow=2,ncol=1))
-  }
-  n = n-1
-  I = iterpc::iterpc(2, n, label=c(0,1), order=T, replace=T)
-  grid = iterpc::getall(I)
-  grid = grid[order(rowSums(grid)),]
-  grid = subset(grid,rowSums(grid)<=1)
-  grid = grid[,n:1]
-  return(grid)
-}
-
-getCombinations = function(n){
-  I = iterpc::iterpc(n, 2)
-  grid = iterpc::getall(I)
-  return(grid)
-}
-
 getNames_dc = function(names,position){
   new.names = c("mean1","mean2","lower1","upper1","lower2","upper2","mean.diff","lower.diff","upper.diff")
   for(i in 1:length(names)){
