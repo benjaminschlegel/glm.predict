@@ -5,32 +5,45 @@ nominal_discrete.change = function(model,values1,values2,sim.count=1000,conf.int
   }
   n.coefs = length(mu[1,])
   n = length(mu[,1])
-  sim = matrix(ncol=n.coefs,nrow=n)
+  sim = matrix(nrow=sim.count, ncol = n.coefs * n)
   
   x = matrix(ncol=2,nrow=n+1)
   
   ev1 = matrix(nrow=(n+1),ncol=sim.count)
   ev2 = matrix(nrow=(n+1),ncol=sim.count)
   
-  for(i in 1:sim.count){
-    for(j in 1:n){
-      if(!is.null(set.seed)){
-        set.seed(set.seed)
-      }
-      sim[j,] = MASS::mvrnorm(mu=mu[j,],Sigma=sigma[(n.coefs*(j-1)+1):(n.coefs*j),(n.coefs*(j-1)+1):(n.coefs*j)])
+  for(j in 1:n){
+    from = (n.coefs*(j-1)+1)
+    to = (n.coefs*j)
+    if(!is.null(set.seed)){
+      set.seed(set.seed)
     }
-    
-    x[,1] = c(0,sim %*% values1)
-    x[,2] = c(0,sim %*% values2)
+    sim[,from:to] = MASS::mvrnorm(sim.count,mu=mu[j,],Sigma=sigma[from:to,from:to])
+  }
+  
+  for(i in 1:sim.count){
+    sim.temp = NULL
+    for(j in 1:n){
+      from = (n.coefs*(j-1)+1)
+      to = (n.coefs*j)
+      if(is.null(sim.temp)){
+        sim.temp = sim[i,from:to]
+      }else{
+        sim.temp = rbind(sim.temp,sim[i,from:to])
+      }
+      
+    }
+    x[,1] = c(0,sim.temp %*% values1)
+    x[,2] = c(0,sim.temp %*% values2)
     
     e = exp(x)
     
     for(j in 1:(n+1)){
       ev1[j,i] = e[j,1]/colSums(e)[1]
       ev2[j,i] = e[j,2]/colSums(e)[2]
-    }
-    
+    }    
   }
+  
   
   diff = ev1-ev2
   

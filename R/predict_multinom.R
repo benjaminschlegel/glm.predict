@@ -5,19 +5,34 @@ multinom.predict = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL
   }
   n.coefs = length(mu[1,])
   n = length(mu[,1])
-  sim = matrix(ncol=n.coefs,nrow=n)
+  sim = matrix(nrow=sim.count, ncol = n.coefs * n)
   
   ev = matrix(nrow=(n+1),ncol=sim.count)
   
+  for(j in 1:n){
+    from = (n.coefs*(j-1)+1)
+    to = (n.coefs*j)
+    if(!is.null(set.seed)){
+      set.seed(set.seed)
+    }
+    sim[,from:to] = MASS::mvrnorm(sim.count,mu=mu[j,],Sigma=sigma[from:to,from:to])
+  }
+  
   for(i in 1:sim.count){
+    
+    sim.temp = NULL
     for(j in 1:n){
-      if(!is.null(set.seed)){
-        set.seed(set.seed)
+      from = (n.coefs*(j-1)+1)
+      to = (n.coefs*j)
+      if(is.null(sim.temp)){
+        sim.temp = sim[i,from:to]
+      }else{
+        sim.temp = rbind(sim.temp,sim[i,from:to])
       }
-      sim[j,] = MASS::mvrnorm(mu=mu[j,],Sigma=sigma[(n.coefs*(j-1)+1):(n.coefs*j),(n.coefs*(j-1)+1):(n.coefs*j)])
+      
     }
     
-    x = c(0,sim %*% values)
+    x = c(0,sim.temp %*% values)
     
     e = exp(x)
     
