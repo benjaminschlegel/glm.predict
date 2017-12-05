@@ -2,7 +2,7 @@ Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM
 Version: 3.0-0
-Date: 2017-11-27
+Date: 2017-12-05
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between

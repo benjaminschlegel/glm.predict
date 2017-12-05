@@ -48,8 +48,8 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         base.combinations_2[r,c:(c + length(current.values[v1,]) - 1)] = current.values[f.v2,]
         
         # labels
-        result[r, data.frame.position] = getLabel(model, i, f.v1)
-        result[r, data.frame.position + 1] = getLabel(model, i, f.v2)
+        result[r, data.frame.position] = getLabel(data, i, f.v1)
+        result[r, data.frame.position + 1] = getLabel(data, i, f.v2)
         data.frame.position = data.frame.position + 2
         c = c + 1
       }else if(!is.null(position) && i == position){
