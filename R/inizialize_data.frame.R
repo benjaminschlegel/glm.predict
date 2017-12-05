@@ -10,7 +10,7 @@ initialize_data.frame = function(data, position = position){
     dc_var = cnames[position]
     cnames[position] = paste0(dc_var,"_val1")
     cnames = append(cnames, paste0(dc_var,"_val2"), position)
-    names = c("mean_val1","lower_val1","upper_val1","mean_val2","lower_val2","upper_val2","dc","dc_lower","dc_upper",cnames)
+    names = c("val1_mean","val1_lower","val1_upper","val2_mean","val2_lower","val2_upper","dc_mean","dc_lower","dc_upper",cnames)
     log.pos = ifelse(log.pos > position, log.pos + 1, log.pos)
     if(position %in% log.pos){
       log.pos = append(log.pos, position + 1, which(log.pos == position))

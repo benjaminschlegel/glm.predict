@@ -70,9 +70,10 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
       combinations = cbind(combinations_1,combinations_2)
       if(is.null(dv_levels)){
         result[, 1:9] = t(parallel::parApply(cl, combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed))
+        result[,  c("val1_lower", "val1_upper", "val2_mean", "val2_upper", "dc_mean", "dc_lower")] = 
+          result[,  c("val2_mean", "dc_mean", "val1_lower", "dc_lower", "val1_upper", "val2_upper")]
       }else{
         temp = parallel::parApply(cl, combinations, 1, dc,  model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed)
-        print(temp)
         result[, 1:9] = t(do.call(rbind,lapply(1:9, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations_1)))
       }
     }
@@ -93,6 +94,8 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
       combinations = cbind(combinations_1,combinations_2)
       if(is.null(dv_levels)){
         result[, 1:9] = t(apply(combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed))
+        result[,  c("val1_lower", "val1_upper", "val2_mean", "val2_upper", "dc_mean", "dc_lower")] = 
+          result[,  c("val2_mean", "dc_mean", "val1_lower", "dc_lower", "val1_upper", "val2_upper")]
       }else{
         temp = apply(combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed)
         result[, 1:9] = t(do.call(rbind,lapply(1:9, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations_1))) 
