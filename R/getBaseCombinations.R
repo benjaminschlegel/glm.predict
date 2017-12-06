@@ -61,7 +61,7 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         result[r,data.frame.position] = current.values[v1]
         result[r,data.frame.position+1] = current.values[v2]
         data.frame.position = data.frame.position + 2
-        c = c + length(current.values[v1,])
+        c = c + length(current.values[v1])
       }else if(is.factor[i]){
         if(is.null(position)){
           base.combinations[r,c:(c + length(current.values[v1,]) - 1)] = current.values[v1,]
