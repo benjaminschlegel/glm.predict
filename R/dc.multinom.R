@@ -68,8 +68,9 @@ dc.multinom = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
   rownames(result) = model$lev
   
   for(j in 1:(n+1)){
-    result[j,] = c(mean(ev1[j,]), quantile(ev1[j,],probs = c(lower,upper)),mean(ev2[j,]), quantile(ev2[j,],probs = c(lower,upper)),
-                   mean(diff[j,]),quantile(diff[j,],probs = c(lower,upper)))
+    result[j,] = c(mean(ev1[j,], na.rm=T), quantile(ev1[j,], probs = c(lower,upper), na.rm=T), mean(ev2[j,], na.rm=T), 
+                   quantile(ev2[j,],probs = c(lower,upper), na.rm=T),
+                   mean(diff[j,], na.rm=T), quantile(diff[j,], probs = c(lower,upper), na.rm=T))
   }
   
   return(result)

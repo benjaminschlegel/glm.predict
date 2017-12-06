@@ -17,7 +17,7 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
   
   # get base combinations and labels for result
   cnames = colnames(matrix)
-  value.names = grep("^[^(][^:\\^2]*$",cnames, value = T)
+  value.names = grep("^[^(][^:\\^]*$",cnames, value = T)
   base.combinations = matrix(NA, nrow = rows, ncol = length(value.names))
   colnames(base.combinations) = value.names
   if(!is.null(position)){
@@ -44,14 +44,14 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         combinations = getFactorCombinations(length(current.values[,1]))
         f.v1 = combinations[v1,1]
         f.v2 = combinations[v1,2]
-        base.combinations_1[r,c:(c + length(current.values[v1,]) - 1)] = current.values[f.v1,]
-        base.combinations_2[r,c:(c + length(current.values[v1,]) - 1)] = current.values[f.v2,]
+        base.combinations_1[r,c:(c + length(current.values[f.v1,]) - 1)] = current.values[f.v1,]
+        base.combinations_2[r,c:(c + length(current.values[f.v1,]) - 1)] = current.values[f.v2,]
         
         # labels
         result[r, data.frame.position] = getLabel(data, i, f.v1)
         result[r, data.frame.position + 1] = getLabel(data, i, f.v2)
         data.frame.position = data.frame.position + 2
-        c = c + 1
+        c = c + length(current.values[f.v1,])
       }else if(!is.null(position) && i == position){
         v2 = v1 + 1
         base.combinations_1[r,c:(c + length(current.values[v1]) - 1)] = current.values[v1]
@@ -61,7 +61,7 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         result[r,data.frame.position] = current.values[v1]
         result[r,data.frame.position+1] = current.values[v2]
         data.frame.position = data.frame.position + 2
-        c = c + 1
+        c = c + length(current.values[f.v1,])
       }else if(is.factor[i]){
         if(is.null(position)){
           base.combinations[r,c:(c + length(current.values[v1,]) - 1)] = current.values[v1,]

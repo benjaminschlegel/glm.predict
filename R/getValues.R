@@ -7,7 +7,7 @@ getValues = function(values, data){
   values.vector = unlist(strsplit(values,";"))
   is.factor = rep(F,length(values.vector))
   for(value in values.vector){
-    varName = colnames(data)[pos]
+    varName = colnames(data)[pos+1] # +1 because of y
     var = data[[varName]]
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       mode = Mode(var,na.rm=T)

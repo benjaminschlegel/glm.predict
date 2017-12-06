@@ -1,5 +1,5 @@
 initialize_data.frame = function(data, position = position){
-  cnames = colnames(data)
+  cnames = colnames(data)[-1] # -1 because of y
   log.pos = grep("log\\(.+\\)",cnames)
   cnames = gsub("log\\(","",cnames)
   cnames = gsub("I\\(","",cnames)

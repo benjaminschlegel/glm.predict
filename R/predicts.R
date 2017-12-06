@@ -4,7 +4,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   }
   
   if(inherits(model, "multinom")){
-    doPar =F
+    doPar = F
   }
   
   # remove any empty space in values
@@ -21,11 +21,11 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   }else{
     dv_levels = NULL
   }
-  data = full_data[,-1]  # data without y
+  #data = full_data[,-1]  # data without y
   matrix = stats::model.matrix(model)
   
   # get base combinations
-  temp = getBaseCombinations(data, matrix, values, model, dv_levels, position)
+  temp = getBaseCombinations(full_data, matrix, values, model, dv_levels, position)
   result = temp[["result"]]
   if(is.null(position)){
     base.combinations = temp[["base.combinations"]]
