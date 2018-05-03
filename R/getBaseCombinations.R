@@ -102,7 +102,7 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
   if(!is.null(dv_levels)){
     dv_levels.vector = rep(dv_levels, length(result[,1]))
     result = result[rep(row.names(result),length(dv_levels)),]
-    result = result[order(rownames(result)),]
+    result = result[order(as.numeric(rownames(result))),]
     rownames(result) = 1:length(result[,1])
     result$level = dv_levels.vector
   }
