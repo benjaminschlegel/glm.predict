@@ -1,8 +1,8 @@
 Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM
-Version: 3.0-1
-Date: 2010-05-03
+Version: 3.0-2
+Date: 2018-05-29
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
@@ -11,7 +11,8 @@ License: GPL (>=2)
 Depends:
     R (>= 3.1.0),
     stats,
-    MASS
+    MASS,
+	parallel
 Imports:
     nnet
 URL: https://benjaminschlegel.ch/r/glm.predict/
