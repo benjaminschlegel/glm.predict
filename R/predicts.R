@@ -25,6 +25,10 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   matrix = stats::model.matrix(model)
   
   # get base combinations
+  char_pos = which(sapply(full_data, is.character))
+  for(i in char_pos){
+    full_data[,i] = as.factor(full_data[,i])
+  }
   temp = getBaseCombinations(full_data, matrix, values, model, dv_levels, position)
   result = temp[["result"]]
   if(is.null(position)){

@@ -9,9 +9,6 @@ getValues = function(values, data){
   for(value in values.vector){
     varName = colnames(data)[pos+1] # +1 because of y
     var = data[[varName]]
-    if(!is.numeric(var)){
-      var = as.factor(var)
-    }
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       mode = Mode(var,na.rm=T)
       if(is.numeric(mode)){
