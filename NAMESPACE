@@ -1,5 +1,5 @@
 import(MASS,nnet,stats, parallel)
-export(predicts, basepredict, basepredict.lm, basepredict.glm, basepredict.polr, basepredict.multinom, dc, dc.lm, dc.glm, dc.polr, dc.multinom, discrete.change,discrete.changes,ordinal_discrete.change,ordinal_discrete.changes,nominal_discrete.change,nominal_discrete.changes,glm.predict_,glm.predicts,polr.predict,polr.predicts,multinom.predict,multinom.predicts)
+export(predicts, basepredict, basepredict.lm, basepredict.glm, basepredict.polr, basepredict.multinom, dc, dc.lm, dc.glm, dc.polr, dc.multinom)
 S3method(basepredict, lm)
 S3method(basepredict, glm)
 S3method(basepredict, polr)
