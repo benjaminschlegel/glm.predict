@@ -55,7 +55,7 @@ getValues = function(values, data){
       components = as.numeric(unlist(strsplit(value,"[F\\(,\\)]")))
       n = length(levels(var))
       x = components[c(-1,-2)]
-      dummies = glm.predict:::getDummies(n)
+      dummies = getDummies(n)
       current.values = matrix(dummies[x,], nrow = length(x))
       is.factor[pos] = T
     } # get specific factor levels
