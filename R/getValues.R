@@ -51,24 +51,24 @@ getValues = function(values, data){
       }
       current.values = max(var,na.rm = T)
     } # max
-    else if(grepl("^F\\([0-9]+\\)$",value,ignore.case = TRUE)){ # single factor
-      components = as.numeric(unlist(strsplit(value,"[F\\(\\)]")))
+    else if(grepl("^F\\([0-9]+(,[0-9]+)*\\)$",value,ignore.case = TRUE)){ # single factor
+      components = as.numeric(unlist(strsplit(value,"[F\\(,\\)]")))
       n = length(levels(var))
-      x = components[3]
-      dummies = getDummies(n)
-      current.values = matrix(dummies[x,],nrow=1)
+      x = components[c(-1,-2)]
+      dummies = glm.predict:::getDummies(n)
+      current.values = matrix(dummies[x,], nrow = length(x))
       is.factor[pos] = T
-    } # single factor value
+    } # get specific factor levels
     else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
       n = length(levels(var))
       current.values = getDummies(n)
       is.factor[pos] = T
     } # factor
-    else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
+    else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),([0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
       components = as.numeric(unlist(strsplit(value,"[-,]")))
       i.container = c()
       for(i in 1:length(components)){
-        if(components[i]==""){
+        if(is.na(components[i]) || components[i]==""){
           components[i+1] = paste0("-",components[i+1])
           i.container = c(i.container,i)
         }
@@ -76,13 +76,14 @@ getValues = function(values, data){
       if(length(i.container)>0){
         components = components[-i.container]
       }
+      components = as.numeric(components)
       current.values = seq(from=components[1],to=components[2],by=components[3])
     } # from-to,by
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?)$",value)){ # from-to
       components = unlist(strsplit(value,"-"))
       i.container = c()
       for(i in 1:length(components)){
-        if(components[i]==""){
+        if(is.na(components[i]) || components[i]==""){
           components[i+1] = paste0("-",components[i+1])
           i.container = c(i.container,i)
         }
@@ -90,6 +91,7 @@ getValues = function(values, data){
       if(length(i.container)>0){
         components = components[-i.container]
       }
+      components = as.numeric(components)
       current.values = components[1]:components[2]
     } # from-to
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]

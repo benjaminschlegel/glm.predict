@@ -46,7 +46,12 @@ OPTIONAL set a seed for the random number generator
 }
 
 \examples{
-## For examples see ?basepredict
+data = MASS::survey
+data$Smoke = ordered(data$Smoke, levels = c("Never", "Occas", "Regul", "Heavy"))
+model1 = polr(Smoke ~ Height + Pulse, data=data)
+summary(model1)
+# predicted probability of smoking of a person with height 170 and an average pulse
+basepredict(model1, c(170,mean(MASS::survey$Pulse,na.rm=TRUE)))
 }
 
 \keyword{ models }

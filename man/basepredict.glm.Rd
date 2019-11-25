@@ -46,7 +46,10 @@ OPTIONAL set a seed for the random number generator
 }
 
 \examples{
-## For examples see ?basepredict
+model1 = glm(Sex ~ Height + Smoke + Pulse, data=MASS::survey, family=binomial(link=logit))
+summary(model1)
+# predicted probability of a non smoking person with height 150 and average pulse
+basepredict(model1, c(1,150,1,0,0,mean(MASS::survey$Pulse,na.rm=TRUE)))
 }
 
 \keyword{ models }

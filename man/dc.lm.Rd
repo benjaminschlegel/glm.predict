@@ -53,7 +53,13 @@ the values of case 2 as vector in the order how they appear in the summary(model
 }
 
 \examples{
-## for examples see ?dc
+model1 = lm(Pulse ~ Height + Smoke, data=MASS::survey)
+summary(model1)
+# comparing a person with the height 150cm to 151cm
+dc(model1, values1 = c(1,150,1,0,0),
+  values2 = c(1,151,1,0,0))
+# the difference is not significant, because the confidence interval
+# includes the 0
 }
 
 \keyword{ models }

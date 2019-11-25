@@ -45,7 +45,10 @@ OPTIONAL set a seed for the random number generator
 }
 
 \examples{
-## For examples see ?basepredict
+model1 = lm(Pulse ~ Height + Smoke, data=MASS::survey)
+summary(model1)
+# predicted pulse value of a non smoking person with height 150
+basepredict(model1, c(1,150,1,0,0))
 }
 
 \keyword{ models }

@@ -53,7 +53,13 @@ the values of case 2 as vector in the order how they appear in the summary(model
 }
 
 \examples{
-## for examples see ?dc
+data = MASS::survey
+data$Smoke = ordered(data$Smoke, levels = c("Never", "Occas", "Regul", "Heavy"))
+model1 = polr(Smoke ~ Height + Pulse, data=data)
+summary(model1)
+dc(model1, values1 = c(150,mean(MASS::survey$Pulse,na.rm=TRUE)),
+  values2 = c(151,mean(MASS::survey$Pulse,na.rm=TRUE)))
+# all differences are significant as the confidence intervals do not include 0
 }
 
 \keyword{ models }

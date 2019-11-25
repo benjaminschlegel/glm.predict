@@ -37,6 +37,7 @@ The values must be in the following way: \emph{"value1;value2;value3;..."}. Each
 	\item \strong{log(value1,value2,value3,...)}: takes the  log of the given values (for example: "160,180" --> 160,180)
 	\item \strong{log(value1)}: takes the log of the given value (for example: "5.34" --> 5.34)
 	\item \strong{"F"}: takes all values of a factor/character
+	\item \strong{"F(1,4,7)"}: takes the first, fourth and seventh level of a factor/character
 	\item \strong{"F(2)"}: takes the second level of a factor/character
 }
 }
