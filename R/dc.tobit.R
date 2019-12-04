@@ -1,4 +1,4 @@
-dc.lm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL){
+dc.tobit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL){
 
     if(is.null(values) && (is.null(values1) || is.null(values2))){
       stop("Either values1 and values2 or values has to be specified!")
@@ -8,12 +8,13 @@ dc.lm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma 
       values1 = values[1 : (l/2)]
       values2 = values[(l/2 + 1) : l]
     }
-
+    
     n = sim.count
     mu = coef(model)
     if(is.null(sigma)){
       sigma = stats::vcov(model)
     }
+    sigma = sigma[-nrow(sigma), -nrow(sigma)]
     if(!is.null(set.seed)){
       set.seed(set.seed)
     }
@@ -28,6 +29,8 @@ dc.lm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma 
     
     ev[,1] = sapply(1:n,simu.lm,j=1,sim=sim,v=v)
     ev[,2] = sapply(1:n,simu.lm,j=2,sim=sim,v=v)
+    
+    ev = ev * pnorm(ev / model$scale) 
     
     diff = matrix(1:n,n)
     diff = ev[,1]-ev[,2]
@@ -47,9 +50,3 @@ dc.lm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma 
     
     return(results)
   }
-
-simu.lm = function(i,j,sim,v){
-  x = c(NA,NA)
-  x[j] = sum(sim[i,]%*%v[,j])
-  return(x[j])
-}
