@@ -66,6 +66,14 @@ getValues = function(values, data){
     } # factor
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),([0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
       components = as.numeric(unlist(strsplit(value,"[-,]")))
+      if(is.na(components[1])){
+        components = components[-1]
+        components[1] = components[1] * -1
+      }
+      if(is.na(components[2])){
+        components = components[-2]
+        components[2] = components[2] * -1
+      }
       i.container = c()
       for(i in 1:length(components)){
         if(is.na(components[i]) || components[i]==""){

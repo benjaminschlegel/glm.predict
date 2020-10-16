@@ -54,7 +54,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     cl = parallel::makeCluster(cores)
     
     if(is.null(position)){
-      parallel::clusterExport(cl, varlist = c("basepredict.glm","basepredict.polr","basepredict.multinom"), envir=environment())
+      parallel::clusterExport(cl, varlist = c("basepredict.lm","basepredict.glm","basepredict.polr","basepredict.multinom","basepredict.tobit"), envir=environment())
       parallel::clusterEvalQ(cl, library("MASS"))
       parallel::clusterEvalQ(cl, library("nnet"))
       
@@ -66,7 +66,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
         result[, 1:3] = t(do.call(rbind,lapply(1:3, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations)))
       }
     }else{
-      parallel::clusterExport(cl, varlist = c("dc.glm","dc.polr","dc.multinom", "simu.glm"), envir=environment())
+      parallel::clusterExport(cl, varlist = c("dc.lm", "dc.glm","dc.polr","dc.multinom", "simu.glm", "dc.tobit"), envir=environment())
       parallel::clusterEvalQ(cl, library("MASS"))
       parallel::clusterEvalQ(cl, library("nnet"))
       
