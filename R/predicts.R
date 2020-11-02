@@ -1,11 +1,22 @@
-predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL, doPar = TRUE){
+predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL, doPar = TRUE,
+                    type = c("any", "simulation", "bootstrap")){
   if(!is.character(values)){
     stop("values must be given as character!")
+  }
+  
+  if(length(unlist(strsplit(values, ";"))) != ncol(model.frame(model)) - 1){
+    stop("The length of values does not match the number of independend variables.")
+  }
+  
+  if(!is.null(position) && (!is.numeric(position) || position != round(position))){
+    stop("position must be a whole number or NULL.")
   }
   
   if(inherits(model, "multinom")){
     doPar = F
   }
+  
+  type = match.arg(type)
   
   # remove any empty space in values
   values = gsub("\\s","",values)
@@ -54,7 +65,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     cl = parallel::makeCluster(cores)
     
     if(is.null(position)){
-      parallel::clusterExport(cl, varlist = c("basepredict.lm","basepredict.glm","basepredict.polr","basepredict.multinom","basepredict.tobit"), envir=environment())
+      parallel::clusterExport(cl, varlist = c("basepredict.lm","basepredict.glm","basepredict.polr","basepredict.multinom","basepredict.tobit", "calculate_glm_pred"), envir=environment())
       parallel::clusterEvalQ(cl, library("MASS"))
       parallel::clusterEvalQ(cl, library("nnet"))
       
@@ -66,7 +77,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
         result[, 1:3] = t(do.call(rbind,lapply(1:3, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations)))
       }
     }else{
-      parallel::clusterExport(cl, varlist = c("dc.lm", "dc.glm","dc.polr","dc.multinom", "simu.glm", "dc.tobit"), envir=environment())
+      parallel::clusterExport(cl, varlist = c("dc.lm", "dc.glm","dc.polr","dc.multinom", "calculate_glm_pred", "dc.tobit"), envir=environment())
       parallel::clusterEvalQ(cl, library("MASS"))
       parallel::clusterEvalQ(cl, library("nnet"))
       
@@ -88,20 +99,20 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     # simulate
     if(is.null(position)){
       if(is.null(dv_levels)){
-        result[, 1:3] = t(apply(combinations, 1, basepredict, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed))
+        result[, 1:3] = t(apply(combinations, 1, basepredict, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed, type = type))
       }else{
-        temp = apply(combinations, 1, basepredict, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed)
+        temp = apply(combinations, 1, basepredict, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed, type = type)
         result[, 1:3] = t(do.call(rbind,lapply(1:3, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations)))
       }
       
     }else{
       combinations = cbind(combinations_1,combinations_2)
       if(is.null(dv_levels)){
-        result[, 1:9] = t(apply(combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed))
+        result[, 1:9] = t(apply(combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed, type = type))
         result[,  c("val1_lower", "val1_upper", "val2_mean", "val2_upper", "dc_mean", "dc_lower")] = 
           result[,  c("val2_mean", "dc_mean", "val1_lower", "dc_lower", "val1_upper", "val2_upper")]
       }else{
-        temp = apply(combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed)
+        temp = apply(combinations, 1, dc, model = model, sim.count = sim.count, conf.int = conf.int, sigma = sigma, set.seed = set.seed, type = type)
         result[, 1:9] = t(do.call(rbind,lapply(1:9, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations_1))) 
       }
     }

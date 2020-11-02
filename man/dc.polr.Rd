@@ -10,7 +10,8 @@ two cases with the confidence interval. It can be used for a polr model.
 }
 \usage{
 \method{dc}{polr}(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
-  sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL)
+  sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL,
+  type = c("any", "simulation", "bootstrap"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -37,6 +38,10 @@ the values of case 1 as vector in the order how they appear in the summary(model
 }
   \item{values2}{
 the values of case 2 as vector in the order how they appear in the summary(model) Estimate. Has to be definied if values is not definied.
+}
+  \item{type}{
+OPTIONAL choose between simulation and boostrap, "any" chooses between those two
+according to the number of cases (bootstrap if n < 1000)
 }
 }
 \details{

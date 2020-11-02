@@ -4,10 +4,22 @@ getValues = function(values, data){
   pos = 1
   current.values = NA
   
+  
+  
   values.vector = unlist(strsplit(values,";"))
-  is.factor = rep(F,length(values.vector))
+  is_factor = sapply(data[,-1], is.factor)
+  
   for(value in values.vector){
     varName = colnames(data)[pos+1] # +1 because of y
+    if(grepl("F", value)){
+      if(!is_factor[pos]){
+        stop(paste0(varName, " is specified as a factor in the values argument, but it is numeric."))
+      }
+    }else{
+      if(is_factor[pos] & !grepl("mode", value)){
+        stop(paste0(varName, " is specified as numeric in the values argument, but it is a factor/character."))
+      }
+    }
     var = data[[varName]]
     if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       mode = Mode(var,na.rm=T)
@@ -17,7 +29,6 @@ getValues = function(values, data){
         n = length(levels(var))
         dummies = getDummies(n)
         current.values = matrix(dummies[which(levels(var)==mode),],nrow=1)
-        is.factor[pos] = T
       }
     } # mode
     else if(grepl("^mean$",value,ignore.case = TRUE)){ # mean
@@ -57,12 +68,12 @@ getValues = function(values, data){
       x = components[c(-1,-2)]
       dummies = getDummies(n)
       current.values = matrix(dummies[x,], nrow = length(x))
-      is.factor[pos] = T
+      
     } # get specific factor levels
     else if(grepl("^F$",value,ignore.case = TRUE)){ # factor
       n = length(levels(var))
       current.values = getDummies(n)
-      is.factor[pos] = T
+      
     } # factor
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),([0-9]+(\\.[0-9]+)?)$",value)){ # from-to,by
       components = as.numeric(unlist(strsplit(value,"[-,]")))
@@ -149,5 +160,5 @@ getValues = function(values, data){
     result = c(result,list(current.values))
     pos = pos + 1
   }
-  return(list(result,is.factor))
+  return(list(result,is_factor))
 }

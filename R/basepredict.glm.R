@@ -1,61 +1,103 @@
-basepredict.glm = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL,set.seed=NULL){
-    
-    # model type
-    model.type = family(model)
-    link = model.type[2]  
-    
-    n = sim.count
-    mu = coef(model)
+basepredict.glm = function(model, values, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, 
+                           type = c("any", "simulation", "bootstrap")){
+  # check inputs
+  if(sum("glm" %in% class(model)) == 0){
+    stop("model has to be of type glm()")
+  }
+  if(length(values) != length(coef(model))){
+    stop("the length of values is not identical to the number of coefficient of the model")
+  }
+  if(!is.numeric(sim.count) | round(sim.count) != sim.count){
+    stop("sim.count has to be whole number")
+  }
+  if(!is.numeric(conf.int)){
+    stop("conf.int has to be numeric")
+  }
+  if(!is.null(set.seed) & !is.numeric(set.seed)){
+    stop("set.seed must be numeric")
+  }
+  
+  type = match.arg(type)
+
+  # model type
+  model.type = family(model)
+  link = model.type[2]
+  
+  if(type == "any"){
+    if(nrow(model$data) < 500){
+      type = "boostrap"
+      message("Type not specified: Using bootstrap as n < 500")
+    }else{
+      type = "simulation"
+      message("Type not specified: Using simulation as n >= 500")
+    }
+  }
+  
+  if(type == "simulation"){
     if(is.null(sigma)){
-      sigma = vcov(model)
+      sigma = stats::vcov(model)
+    }
+    if(nrow(sigma) != length(values)){
+      warning("sigma and values do not match, ignoring the specified sigma")
+      sigma = stats::vcov(model)
     }
     if(!is.null(set.seed)){
       set.seed(set.seed)
     }
-    sim = MASS::mvrnorm(n, mu, sigma)
-    size = length(values)
-    
-    v = values
-    ev = rep(NA,n)
-    
-    
-    for(i in 1:n){
-      x = sum(sim[i,]%*%v)
-      
-      # the inverse link functions
-      if(link == "logit"){
-        ev[i] = exp(x)/(1+exp(x))
-      }
-      if(link == "log"){
-        ev[i] = exp(x)
-      }
-      if(link == "identity"){
-        ev[i] = x
-      }
-      if(link == "probit"){ 
-        ev[i] = pnorm(x)
-      }
-      if(link == "cauchit"){
-        ev[i] = tan(pi*(x-0.5))
-      }
-      if(link == "cloglog"){
-        ev[i] = exp(-exp(x))*(-1+exp(exp(x)))
-      }
-      if(link == "sqrt"){
-        ev[i] = x*x
-      }
-      if(link == "1/mu^2"){
-        ev[i] = 1/sqrt(x)
-      }
-      if(link == "inverse"){
-        ev[i] = 1/x
-      }
+    betas_sim = MASS::mvrnorm(sim.count, coef(model), sigma)
+    # get the predicted probabilities/values with the inverse link function
+    pred = calculate_glm_pred(betas_sim, values, link)
+  }else{ # bootstrap
+    boot = function(x, model){
+      data = model$data
+      sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
+      coef(update(model, data = sample_data))
     }
-    
-    
-    results = t(as.matrix(c(mean(ev,na.rm=T),quantile(ev,(1-conf.int)/2,na.rm=T),quantile(ev,conf.int+(1-conf.int)/2,na.rm=T))))
-    
-    colnames(results) = c("Mean",paste0(100*((1-conf.int)/2),"%"),paste0(100*(conf.int+(1-conf.int)/2),"%"))
-    
-    return(results)
+    betas_boot = do.call('rbind', lapply(seq_len(sim.count), boot, model))
+    # get the predicted probabilities/values with the inverse link function
+    pred = calculate_glm_pred(betas_boot, values, link)
+  }
+  
+  # calculate mean and confident interval
+  confint_lower = (1 - conf.int) / 2 
+  result = t(as.matrix(c(mean(pred, na.rm = TRUE),
+                          quantile(pred, c(confint_lower, 1 - confint_lower), na.rm = TRUE))))
+  # name the output matrix
+  colnames(result) = c("Mean", 
+                        paste0(100 * confint_lower,"%"), 
+                        paste0(100 * (1 - confint_lower),"%"))
+  result
+}
+
+calculate_glm_pred = function(betas, x, link){
+  yhat = betas %*% x
+  
+  # the inverse link functions
+  if(link == "logit"){
+    return(exp(yhat) / (1 + exp(yhat)))
+  }
+  if(link == "log"){
+    return(exp(yhat))
+  }
+  if(link == "identity"){
+    return(yhat)
+  }
+  if(link == "probit"){ 
+    return(pnorm(yhat))
+  }
+  if(link == "cauchit"){
+    return(tan(pi * (yhat - 0.5)))
+  }
+  if(link == "cloglog"){
+    return(exp(-exp(yhat)) * (-1 + exp(exp(yhat))))
+  }
+  if(link == "sqrt"){
+    return(yhat * yhat)
+  }
+  if(link == "1/mu^2"){
+    return(1 / sqrt(yhat))
+  }
+  if(link == "inverse"){
+    return(1 / yhat)
+  }  
 }

@@ -1,13 +1,13 @@
 Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM
-Version: 3.1-1.9001
-Date: 2020-10-16
-Author: Benjamin Schlegel [aut,cre]
-Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
+Version: 3.2-0
+Date: 2020-11-02
+Author: Benjamin E. Schlegel [aut,cre]
+Maintainer: Benjamin E. Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
     the two cases with confidence interval for lm() [linear model], glm() [general linear model], glm.nb() [negative binomial model],
-	polr() [ordinal logistic model], multinom() [multinomial model] and tobit() [tobit model] using Monte Carlo simulations. Reference: Bennet A. Zelner (2009) <doi:10.1002/smj.783>.
+	polr() [ordinal logistic model], multinom() [multinomial model] and tobit() [tobit model] using Monte Carlo simulations or bootstrap. Reference: Bennet A. Zelner (2009) <doi:10.1002/smj.783>.
 License: GPL (>=2)
 Depends:
     R (>= 3.1.0),
@@ -18,5 +18,6 @@ Imports:
     nnet,
 	AER,
 	survival
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr	
 URL: https://benjaminschlegel.ch/r/glm.predict/
-RoxygenNote: 5.0.1

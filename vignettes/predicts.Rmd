@@ -1,0 +1,157 @@
+---
+title: "Introduction to glm.predict"
+author: "Benjamin E. Schlegel"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+description: >
+  Start here if this is your first time using glm.predict. You'll learn how the package is used ad about the difference between simulation and bootstrap.
+vignette: >
+  %\VignetteIndexEntry{Introduction to glm.predict}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(glm.predict)
+set.seed(1848)
+```
+
+After estimating a model, it is often not straight forward to interpret the model output. An easy way of interpretation is to use predicted probabilities/values as well as discrete changes (the difference between two of the former). We usually want confidence intervals with those values to have an idea how exact they are and if the are significant or not. There are basically two approaches to estimate confidence intervals: simulation and bootstrap. Both approaches have in common that they draw 1000 (or more) Coefficients ($\beta$s). Those can be used to calculate the predicted value ($\hat{y}$) given a specific set a x-values we are interested in. Depending on the model we need an inverse link function to get the resulting probability/value. With the resulting 1000 (or more) values we are then able to calculate not only the mean but also the confidence interval using quantiles.
+
+If you want to run the examples by yourself, you can install the package **schlegel** from Github.com:
+
+```{r, eval = FALSE}
+devtools::install_github("benjaminschlegel/schlegel")
+```
+
+
+## Simulation and Bootstrap explained
+
+### Simulation
+*Monte Carlo simulation* uses the property that the coefficients are asymptotically multivariate normal distributed. Asymptotically means that the number of cases should be high. 
+
+In R this is straight forward: The package **MASS** contains a function `mvrnorm()`. The parameter n are the number of draws (e.g. 1000), mu are the coefficients and Sigma the variance-covariance matrix.
+
+A quick example:
+
+We want to estimate the predicted probability to participate in the Swiss national election 2015 for a 30 year old woman. As younger women participate as often as young men or even more but older women participate less then older men, we include an interaction between age and gender in our logistic regression.
+
+```{r}
+df_selects = schlegel::selects2015
+logit_model = glm(participation ~ age * gender, family = binomial, data = df_selects)
+summary(logit_model)
+```
+
+Next we simulate 1000 Coefficients.
+
+```{r}
+betas = coef(logit_model)
+vcov = vcov(logit_model)
+betas_simulated = MASS::mvrnorm(1000, betas, vcov)
+```
+
+With the simulated coefficients we can now estimate $\hat{y}$. x we set to 1 (for the intercept), 30 (for age), 1 (for genderfemale) and 30 ($1 (female) \cdot30(age)$ for age:genderfemale). 
+
+```{r}
+x = c(1, 30, 1, 30)
+yhat = betas_simulated %*% x
+```
+
+As the $\hat{y}$ is on the logit scale, we have to use the inverse link function for logit:
+
+$$
+\pi = \frac{e^{\hat{y}}}{1 + e^{\hat{y}}}
+$$
+```{r}
+predProb = exp(yhat) / (1 + exp(yhat))
+```
+Now we can calculate the mean and the 95%-Confidenzinterval.
+
+```{r}
+mean(predProb)
+quantile(predProb, probs = c(0.025, 0.975))
+```
+We see that a 30-year old woman has a probability to participate in the national election in Switzerland of about 58% with a confidence interval from 55% to 61%.
+
+### Bootstrap
+
+*Bootstrap* on the other hand estimates the model multiple times with each time a slightly different dataset. The data is sampled from the real dataset with the property that one case can be sampled multiple time. At the end there will be datasets were the an outlier is multiple times in the the data and another where it is not in the data at all. Doing this 1000 times (or more) gives 1000 (or more) coefficients. The benefit of this approach is that it also works with smaller datasets. The downside is that it takes longer as reestimating the model 1000 times takes time.
+
+We do the sample example again but this time with bootstrap. We use again the same model. This time we draw the 1000 coefficients with estimating the model 1000 times.
+
+```{r}
+boot = function(x, model){
+  data = model.frame(model)
+  data_sample = data[sample(seq_len(nrow(data)), replace = TRUE), ]
+  coef(update(model, data = data_sample))
+}
+betas_boot = do.call(rbind, lapply(1:1000, boot, logit_model))
+```
+
+The rest is identical.
+
+```{r}
+x = c(1, 30, 1, 30)
+yhat = betas_boot %*% x
+predProb = exp(yhat) / (1 + exp(yhat))
+mean(predProb)
+quantile(predProb, probs = c(0.025, 0.975))
+```
+### Discrete Changes
+
+For discrete changes the idea is exactly the same. But here we calculate with the drawn coefficients predProb1 and predProb2 with each another x. The 1000 discrete changes are the difference between predProb1 and predProb2. With those we can again calculate mean and confidence intervals.
+
+## Using the package
+
+After we covered the idea behind the two approaches, we see how the package helps us doing the job. The two S3-functions `basepredict()` and `dc()` do basically exactly the same as the examples above (`model` is the model, `values` the x, `sim.count` how many draws we want (default: 1000), `conf.int` the confidence interval (default: 0.95), `simga` allows us to add a corrected variance-covariance matrix, `set.seed` allows to set a seed and `type` gives the possibility to choose between simulation and bootstrap). Much more convenient however is the function `predicts()` which allows to calculate multiple values at once.
+
+The function `predicts()` needs the model and the wanted values as a character. Other than with the base functions `basepredict()` and `dc()` we specify the values for each variable and not for each coefficient. What we can specify depends on the variable type.
+
+ * Factors / Character
+
+If you want all values of a factor/character you simply can write a "F". If you only want to have certain values, you can tell which one you want in (). Lets suppose we have factor country with 26 countries, but we only want the 3rd, the 7th and the 21st country, then we would write "F(3,7,21)". We can also just use the mode value with "mode".
+
+ * Numeric
+
+If we have a numeric variable, we have a lot more possibilites. We can again use the mode by writing "mode", but also the "median" or the "mean", we can use "min" or "max", if we want quartile we can write "Q4", for quintiles "Q5" or in general "Q#" where # stand for any whole number (e.g. "Q2" would add the min, median and max-value). We can also write just any number like "-34.43", but also two numbers separated with a minus-sign to get all number between the two number (e.g. "1-100" would give 1, 2, 3, ..., 100). If you want a different step then 1 you can add the step after a comma (e.g. "-3.1-9.7,0.2" would give -3.1, -2.9, -2.7, ..., 9.7). You can also just add multiple number separated by comma (e.g. "3,7.2,9.3"). The last four possiblies we can also suround by a "log()" to include the log of those numbers (e.g. "log(100-1000,100)").
+
+The parameter `position` is for discrete changes. If it is null the function return predicted probabilities/values. If we want discrete changes we have to tell for which pariable (position). Lets suppose we want to have discrete changes for the 2nd variable, then we would write `position=2`. The other parameters of the functions are `sim.count` to change the number of draws, `conf.int` to change the coeffidence interval from a 95% to for example a 90% (you would write `conf.int = 0.9`), `simga` for a corrected variance-covariance matrix (for example when you correct it for heteroscedasticity), `set.seed` to set a seed for replication, doPar if you face trouble with the parallel version and want to try to run it sequential (multinom() is always sequential) and `type` to choose between simulation and bootstrap. If not set the choice depends on the number of cases in the dataset.
+
+### Example
+
+We estimate ordinal logistic regression with the opinion if Switzerland should be part of the European Union (`opinion_eu_membership`) as dependent variable. As independent variable we take the interaction between elected party (`vote_choice`) and left-right self position (`lr_self`) and as control variables age and gender.
+
+```{r}
+df_selects = schlegel::selects2015
+library(MASS)
+ologit_model = polr(opinion_eu_membership ~ vote_choice * lr_self + age + gender, 
+                    data = df_selects, Hess = TRUE)
+summary(ologit_model)
+```
+Next we estimate predicted probabilities for the left right positions 0, 5 and 10 for all parties. For age we take the mean, for gender the mode.
+
+```{r}
+df_pred = predicts(ologit_model, "F;0,5,10;mean;mode")
+head(df_pred)
+```
+We get back a data.frame. Next we estimate the discrete change between a SVP and a SP voter for all values of left-right.
+
+```{r}
+df_dc = predicts(ologit_model, "F(1,6);0-10;mean;mode", position = 1)
+head(df_dc)
+```
+
+We can now plot the discrete change using **ggplot2**.
+
+```{r}
+library(ggplot2)
+# put the levels in the right order
+df_dc$level = factor(df_dc$level, levels = levels(df_selects$opinion_eu_membership))
+ggplot(df_dc, aes(x = lr_self, y = dc_mean, ymin = dc_lower, ymax = dc_upper)) +
+  geom_ribbon(alpha = 0.5) + geom_line() + facet_wrap(~level) +
+  theme_minimal() + geom_hline(yintercept = 0, col = "red", linetype = "dashed") +
+  ylab("discrete change between SP and SVP") + xlab("left-right position") +
+  ggtitle("Opinion if Switzerland should join the EU")
+```
+

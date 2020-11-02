@@ -8,7 +8,8 @@ predicted value
 The function calculates the predicted value with the confidence interval for a lm model.
 }
 \usage{
-\method{basepredict}{lm}(model, values, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL)
+\method{basepredict}{lm}(model, values, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL,
+  type = c("any", "simulation", "bootstrap"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,6 +30,10 @@ OPTIONAL the variance-covairance matrix, can be changed when having for exaple r
 }
   \item{set.seed}{
 OPTIONAL set a seed for the random number generator
+}
+  \item{type}{
+OPTIONAL choose between simulation and boostrap, "any" chooses between those two
+according to the number of cases (bootstrap if n < 1000)
 }
 }
 \details{
