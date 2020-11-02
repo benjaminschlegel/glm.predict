@@ -18,6 +18,17 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   
   type = match.arg(type)
   
+  if(type == "any"){
+    if(nrow(model.frame(model)) < 500){
+      type = "boostrap"
+      message("Type not specified: Using bootstrap as n < 500")
+    }else{
+      type = "simulation"
+      message("Type not specified: Using simulation as n >= 500")
+    }
+  }
+  
+  
   # remove any empty space in values
   values = gsub("\\s","",values)
   
