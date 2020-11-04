@@ -21,7 +21,7 @@ basepredict.lm = function(model, values, sim.count = 1000, conf.int = 0.95, sigm
   
   if(type == "any"){
     if(nrow(model.frame(model)) < 500){
-      type = "boostrap"
+      type = "bootstrap"
       message("Type not specified: Using bootstrap as n < 500")
     }else{
       type = "simulation"

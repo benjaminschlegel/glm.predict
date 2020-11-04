@@ -33,7 +33,7 @@ dc.multinom = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
   
   if(type == "any"){
     if(nrow(model.frame(model)) < 500){
-      type = "boostrap"
+      type = "bootstrap"
       message("Type not specified: Using bootstrap as n < 500")
     }else{
       type = "simulation"
