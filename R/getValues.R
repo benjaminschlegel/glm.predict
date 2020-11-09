@@ -62,7 +62,7 @@ getValues = function(values, data){
       }
       current.values = max(var,na.rm = T)
     } # max
-    else if(grepl("^F\\([0-9]+(,[0-9]+)*\\)$",value,ignore.case = TRUE)){ # single factor
+    else if(grepl("^F\\([0-9]+(,[0-9]+)*\\)$",value,ignore.case = TRUE)){ # specific levels of factor
       components = as.numeric(unlist(strsplit(value,"[F\\(,\\)]")))
       n = length(levels(var))
       x = components[c(-1,-2)]

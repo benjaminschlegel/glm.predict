@@ -8,7 +8,7 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
   values.list = value[[1]]
   is.factor = value[[2]]
   
-  # get products for combination callculation
+  # get products for combination calculation
   products = getProducts(value, position)
   
   # initialize variables
@@ -48,8 +48,12 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         base.combinations_2[r,c:(c + length(current.values[f.v1,]) - 1)] = current.values[f.v2,]
         
         # labels
-        result[r, data.frame.position] = getLabel(data, i, f.v1)
-        result[r, data.frame.position + 1] = getLabel(data, i, f.v2)
+        label_pos1 = which(current.values[f.v1,]==1)
+        label_pos2 = which(current.values[f.v2,]==1)
+        label_pos1 = ifelse(length(label_pos1) == 0, 1, label_pos1 + 1)
+        label_pos2 = ifelse(length(label_pos2) == 0, 1, label_pos2 + 1) 
+        result[r, data.frame.position] = getLabel(data, i, label_pos1)
+        result[r, data.frame.position + 1] = getLabel(data, i, label_pos2)
         data.frame.position = data.frame.position + 2
         c = c + length(current.values[f.v1,])
       }else if(!is.null(position) && i == position){

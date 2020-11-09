@@ -42,7 +42,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   }else{
     dv_levels = NULL
   }
-  #data = full_data[,-1]  # data without y
+  # data = full_data[,-1]  # data without y
   matrix = stats::model.matrix(model)
   
   # get base combinations
