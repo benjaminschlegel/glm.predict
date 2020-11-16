@@ -66,7 +66,7 @@ $$
 ```{r}
 predProb = exp(yhat) / (1 + exp(yhat))
 ```
-Now we can calculate the mean and the 95%-Confidenzinterval.
+Now we can calculate the mean and the 95%-confidence interval.
 
 ```{r}
 mean(predProb)
@@ -114,9 +114,9 @@ If you want all values of a factor/character you simply can write a "F". If you 
 
  * Numeric
 
-If we have a numeric variable, we have a lot more possibilites. We can again use the mode by writing "mode", but also the "median" or the "mean", we can use "min" or "max", if we want quartile we can write "Q4", for quintiles "Q5" or in general "Q#" where # stand for any whole number (e.g. "Q2" would add the min, median and max-value). We can also write just any number like "-34.43", but also two numbers separated with a minus-sign to get all number between the two number (e.g. "1-100" would give 1, 2, 3, ..., 100). If you want a different step then 1 you can add the step after a comma (e.g. "-3.1-9.7,0.2" would give -3.1, -2.9, -2.7, ..., 9.7). You can also just add multiple number separated by comma (e.g. "3,7.2,9.3"). The last four possiblies we can also suround by a "log()" to include the log of those numbers (e.g. "log(100-1000,100)").
+If we have a numeric variable, we have a lot more possibilities. We can again use the mode by writing "mode", but also the "median" or the "mean", we can use "min" or "max", if we want quartile we can write "Q4", for quintiles "Q5" or in general "Q#" where # stand for any whole number (e.g. "Q2" would add the min, median and max-value). We can also write just any number like "-34.43", but also two numbers separated with a minus-sign to get all number between the two number (e.g. "1-100" would give 1, 2, 3, ..., 100). If you want a different step then 1 you can add the step after a comma (e.g. "-3.1-9.7,0.2" would give -3.1, -2.9, -2.7, ..., 9.7). You can also just add multiple number separated by comma (e.g. "3,7.2,9.3"). The last four possibilities we can also surround by a "log()" to include the log of those numbers (e.g. "log(100-1000,100)").
 
-The parameter `position` is for discrete changes. If it is null the function return predicted probabilities/values. If we want discrete changes we have to tell for which pariable (position). Lets suppose we want to have discrete changes for the 2nd variable, then we would write `position=2`. The other parameters of the functions are `sim.count` to change the number of draws, `conf.int` to change the coeffidence interval from a 95% to for example a 90% (you would write `conf.int = 0.9`), `simga` for a corrected variance-covariance matrix (for example when you correct it for heteroscedasticity), `set.seed` to set a seed for replication, doPar if you face trouble with the parallel version and want to try to run it sequential (multinom() is always sequential) and `type` to choose between simulation and bootstrap. If not set the choice depends on the number of cases in the dataset.
+The parameter `position` is for discrete changes. If it is null the function return predicted probabilities/values. If we want discrete changes we have to tell for which variable (position). Lets suppose we want to have discrete changes for the 2nd variable, then we would write `position=2`. The other parameters of the functions are `sim.count` to change the number of draws, `conf.int` to change the confidence interval from a 95% to for example a 90% (you would write `conf.int = 0.9`), `simga` for a corrected variance-covariance matrix (for example when you correct it for heteroscedasticity), `set.seed` to set a seed for replication, doPar if you face trouble with the parallel version and want to try to run it sequential (multinom() is always sequential) and `type` to choose between simulation and bootstrap. If not set the choice depends on the number of cases in the dataset.
 
 ### Example
 

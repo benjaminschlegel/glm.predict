@@ -27,13 +27,13 @@ OPTIONAL numbers of simulations to be done by the function. default: 1000
 OPTIONAL the confidence interval used by the function. default: 0.95
 }
   \item{sigma}{
-OPTIONAL the variance-covairance matrix, can be changed when having for exaple robust or clustered vcov. default: vcov(model)
+OPTIONAL the variance-covariance matrix, can be changed when having for example robust or clustered vcov. default: vcov(model)
 }
   \item{set.seed}{
 OPTIONAL set a seed for the random number generator
 }
   \item{type}{
-OPTIONAL choose between simulation and boostrap, "any" chooses between those two
+OPTIONAL choose between simulation and bootstrap, "any" chooses between those two
 according to the number of cases (bootstrap if n < 1000)
 }
 }
@@ -41,8 +41,8 @@ according to the number of cases (bootstrap if n < 1000)
   The function makes a simulation for the two cases and compares them to each other. 
 }
 \value{
-  The output is a matrix have in the first colone the predicted value, in the second
-  colone the lower value of the confidence interval and in the third colone the upper value
+  The output is a matrix have in the first column the predicted value, in the second
+  column the lower value of the confidence interval and in the third column the upper value
   of the confidence interval.
 }
 
