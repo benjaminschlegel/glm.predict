@@ -131,13 +131,23 @@ summary(ologit_model)
 ```
 Next we estimate predicted probabilities for the left right positions 0, 5 and 10 for all parties. For age we take the mean, for gender the mode.
 
-```{r}
+```{r, echo=FALSE}
+df_pred = predicts(ologit_model, "F;0,5,10;mean;mode", doPar = FALSE)
+head(df_pred)
+```
+
+```{r, eval=FALSE}
 df_pred = predicts(ologit_model, "F;0,5,10;mean;mode")
 head(df_pred)
 ```
 We get back a data.frame. Next we estimate the discrete change between a SVP and a SP voter for all values of left-right.
 
-```{r}
+```{r, echo = FALSE}
+df_dc = predicts(ologit_model, "F(1,6);0-10;mean;mode", position = 1, doPar = FALSE)
+head(df_dc)
+```
+
+```{r, eval = FALSE}
 df_dc = predicts(ologit_model, "F(1,6);0-10;mean;mode", position = 1)
 head(df_dc)
 ```
