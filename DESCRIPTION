@@ -18,7 +18,7 @@ Imports:
     nnet,
 	AER,
 	survival
-Suggests: knitr, rmarkdown, schlegel, ggplot2
+Suggests: knitr, rmarkdown, schlegel, ggplot2, devtools
 VignetteBuilder: knitr, rmarkdown
 Additional_repositories: https://benjaminschlegel.github.io/drat/
 URL: https://benjaminschlegel.ch/r/glm-predict/

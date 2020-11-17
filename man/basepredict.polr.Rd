@@ -51,12 +51,14 @@ according to the number of cases (bootstrap if n < 1000)
 }
 
 \examples{
+\dontrun{
 data = MASS::survey
 data$Smoke = ordered(data$Smoke, levels = c("Never", "Occas", "Regul", "Heavy"))
 model1 = polr(Smoke ~ Height + Pulse, data=data)
 summary(model1)
 # predicted probability of smoking of a person with height 170 and an average pulse
 basepredict(model1, c(170,mean(MASS::survey$Pulse,na.rm=TRUE)))
+}
 }
 
 \keyword{ models }

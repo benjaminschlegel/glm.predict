@@ -59,6 +59,7 @@ according to the number of cases (bootstrap if n < 1000)
 }
 
 \examples{
+\dontrun{
 model1 = nnet::multinom(Clap ~ Height + Smoke + Pulse, data=MASS::survey)
 summary(model1)
 dc(model1, values1 = c(1,150,1,0,0,mean(MASS::survey$Pulse,na.rm=TRUE)),
@@ -66,6 +67,7 @@ dc(model1, values1 = c(1,150,1,0,0,mean(MASS::survey$Pulse,na.rm=TRUE)),
 # the higher person has a greater probability to be left clapping
 # the difference is significant, because the confidence interval
 # does not include the 0
+}
 }
 
 \keyword{ models }

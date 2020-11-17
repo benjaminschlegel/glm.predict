@@ -21,7 +21,7 @@ After estimating a model, it is often not straight forward to interpret the mode
 
 If you want to run the examples by yourself, you can install the package **schlegel** from Github.com:
 
-```{r, eval = FALSE}
+```{r}
 devtools::install_github("benjaminschlegel/schlegel")
 ```
 
