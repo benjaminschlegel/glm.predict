@@ -3,8 +3,14 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   if(!is.character(values)){
     stop("values must be given as character!")
   }
+  full_data = stats::model.frame(model)
   
-  if(length(unlist(strsplit(values, ";"))) != ncol(model.frame(model)) - 1){
+  # remove weights column
+  if("(weights)" %in% colnames(full_data)){ 
+    full_data = full_data[,-which(colnames(full_data) == "(weights)")]
+  }
+  
+  if(length(unlist(strsplit(values, ";"))) != ncol(full_data) - 1){
     stop("The length of values does not match the number of independend variables.")
   }
   
@@ -32,7 +38,6 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   values = gsub("\\s","",values)
   
   # get data
-  full_data = stats::model.frame(model)
   if(inherits(model,"polr") || inherits(model,"multinom")){
     if(!is.null(levels(full_data[,1]))){
       dv_levels = levels(full_data[,1])
