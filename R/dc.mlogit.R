@@ -48,8 +48,8 @@ dc.mlogit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, si
   # simulation
   betas_draw = MASS::mvrnorm(sim.count, betas, sigma)
   
-  x = matrix(ncol = 2, nrow = n + 1)
-  pred1 = pred2 = matrix(nrow = n + 1, ncol = sim.count)
+  x = matrix(ncol = 2, nrow = length(choices))
+  pred1 = pred2 = matrix(nrow = length(choices), ncol = sim.count)
   
   for(i in 1:sim.count){
     current_betas = betas_draw[i,]
