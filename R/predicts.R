@@ -7,8 +7,8 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   
   # reshape mlogit data
   if("dfidx" %in% class(full_data)){ 
+    choices = levels(full_data$idx[[2]])
     full_data = as.data.frame(full_data)
-    choices = levels(full_data$idx$id2)
     pos_idx = which(colnames(full_data) == "idx")
     full_data = full_data[, -(pos_idx:ncol(full_data))]
     full_data[,1] = as.factor(choices)
