@@ -1,17 +1,26 @@
-getCombinations = function(matrix, base.combinations, model){
+getCombinations = function(matrix, base.combinations, model, dv_levels){
   c = 1
+  ncol = ncol(matrix)
+  if(inherits(model,"mlogit")){
+    cnames = colnames(matrix)
+    for(choice in dv_levels){
+      cnames = gsub(paste0(":", choice), "", cnames)
+    }
+    ncol = length(unique(cnames))
+  }
+  
   if(!inherits(model,"polr")){
-    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol(matrix))
+    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol)
     combinations[,1] = 1
     c = c + 1
   }else{
-    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol(matrix) - 1)
+    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol - 1)
   }
   combinations[,c : (c + ncol(base.combinations) - 1)] = base.combinations
   c = c + ncol(base.combinations)
   
   # add interactions and polygons
-  if(ncol(matrix) > ncol(base.combinations) + 1){ # add interactions
+  if(ncol > ncol(base.combinations) + 1){ # add interactions
     for(name in colnames(matrix)){
       if(grepl(":", name)){
         parts = unlist(strsplit(name, ":"))

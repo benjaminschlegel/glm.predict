@@ -16,7 +16,7 @@ predicts(model, values, position = NULL, sim.count = 1000, conf.int = 0.95,
 }
 \arguments{
   \item{model}{
-the model-Object generated with glm(), glm.nb(), polr() or multinom()
+the model-Object generated with glm(), glm.nb(), polr(), multinom(), mlogit() or tobit()
 }
   \item{values}{
 The values of cases as character in the order how they appear in the summary(model) Estimate.

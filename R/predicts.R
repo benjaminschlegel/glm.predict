@@ -5,6 +5,16 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   }
   full_data = stats::model.frame(model)
   
+  # reshape mlogit data
+  if("dfidx" %in% class(full_data)){ 
+    full_data = as.data.frame(full_data)
+    choices = levels(full_data$idx$id2)
+    pos_idx = which(colnames(full_data) == "idx")
+    full_data = full_data[, -(pos_idx:ncol(full_data))]
+    full_data[,1] = as.factor(choices)
+    
+  }
+  
   # remove weights column
   if("(weights)" %in% colnames(full_data)){ 
     full_data = full_data[,-which(colnames(full_data) == "(weights)")]
@@ -38,7 +48,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   values = gsub("\\s","",values)
   
   # get data
-  if(inherits(model,"polr") || inherits(model,"multinom")){
+  if(inherits(model,"polr") || inherits(model,"multinom") || inherits(model, "mlogit")){
     if(!is.null(levels(full_data[,1]))){
       dv_levels = levels(full_data[,1])
     }else{
@@ -67,10 +77,10 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   
   # add other things to base combinations
   if(is.null(position)){
-    combinations = getCombinations(matrix, base.combinations, model)
+    combinations = getCombinations(matrix, base.combinations, model, dv_levels)
   }else{
-    combinations_1 = getCombinations(matrix, base.combinations_1, model)
-    combinations_2 = getCombinations(matrix, base.combinations_2, model)
+    combinations_1 = getCombinations(matrix, base.combinations_1, model, dv_levels)
+    combinations_2 = getCombinations(matrix, base.combinations_2, model, dv_levels)
   }
   
   
@@ -89,9 +99,11 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     cl = parallel::makeCluster(cores)
     
     if(is.null(position)){
-      parallel::clusterExport(cl, varlist = c("basepredict.lm","basepredict.glm","basepredict.polr","basepredict.multinom","basepredict.tobit", "calculate_glm_pred"), envir=environment())
+      parallel::clusterExport(cl, varlist = c("basepredict.lm","basepredict.glm","basepredict.polr","basepredict.multinom","basepredict.tobit", "calculate_glm_pred", "basepredict.mlogit"), envir=environment())
       parallel::clusterEvalQ(cl, library("MASS"))
       parallel::clusterEvalQ(cl, library("nnet"))
+      parallel::clusterEvalQ(cl, library("mlogit"))
+      parallel::clusterEvalQ(cl, library("dfidx"))
       
       # simulate
       if(is.null(dv_levels)){
@@ -101,9 +113,11 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
         result[, 1:3] = t(do.call(rbind,lapply(1:3, getResultMatrix, result_matrix = temp, levels = length(dv_levels), base.combinations = base.combinations)))
       }
     }else{
-      parallel::clusterExport(cl, varlist = c("dc.lm", "dc.glm","dc.polr","dc.multinom", "calculate_glm_pred", "dc.tobit"), envir=environment())
+      parallel::clusterExport(cl, varlist = c("dc.lm", "dc.glm","dc.polr","dc.multinom", "calculate_glm_pred", "dc.tobit", "dc.mlogit"), envir=environment())
       parallel::clusterEvalQ(cl, library("MASS"))
       parallel::clusterEvalQ(cl, library("nnet"))
+      parallel::clusterEvalQ(cl, library("mlogit"))
+      parallel::clusterEvalQ(cl, library("dfidx"))
       
       # simulate
       combinations = cbind(combinations_1,combinations_2)

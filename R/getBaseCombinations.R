@@ -16,7 +16,16 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
   rows = products[length(products)]
   
   # get base combinations and labels for result
-  cnames = colnames(matrix)
+  if(inherits(model, "mlogit")){ # mlogit matrix is differently shaped
+    cnames = colnames(matrix)
+    for(choice in dv_levels){
+      cnames = gsub(paste0(":", choice), "", cnames)
+    }
+    cnames = unique(cnames)
+  }else{
+    cnames = colnames(matrix)
+  }
+  
   value.names = grep("^[^(][^:\\^]*$",cnames, value = T)
   base.combinations = matrix(NA, nrow = rows, ncol = length(value.names))
   colnames(base.combinations) = value.names
