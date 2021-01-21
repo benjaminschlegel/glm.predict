@@ -82,8 +82,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     combinations_1 = getCombinations(matrix, base.combinations_1, model, dv_levels)
     combinations_2 = getCombinations(matrix, base.combinations_2, model, dv_levels)
   }
-  
-  
+
   chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
   
   if (nzchar(chk) && chk == "TRUE") {

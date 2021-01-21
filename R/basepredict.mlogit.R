@@ -49,8 +49,10 @@ basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NU
     pos_conditional_vars = (n+1):(n+n_conditional)
     pos_multinomial_vars = max(pos_conditional_vars) + 
       (seq_len((length(betas) - max(pos_conditional_vars)) / n) - 1) * n 
-    sim_temp = cbind(current_betas[seq_len(n)],
-                     current_betas[pos_conditional_vars])
+    sim_temp = current_betas[seq_len(n)]
+    for(pos in pos_conditional_vars){
+      sim_temp = cbind(sim_temp, current_betas[pos])
+    }
     
     for(j in pos_multinomial_vars){
       sim_temp = cbind(sim_temp, current_betas[j + seq_len(n)])
