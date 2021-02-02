@@ -5,6 +5,11 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   }
   full_data = stats::model.frame(model)
   
+  # collapse values to one character, if given as vector
+  if(length(values) > 1){
+    values = paste(values, collapse = ";")
+  }
+  
   # reshape mlogit data
   if("dfidx" %in% class(full_data)){ 
     choices = levels(full_data$idx[[2]])
