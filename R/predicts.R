@@ -20,6 +20,9 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     full_data = full_data[,-which(colnames(full_data) == "(weights)")]
   }
   
+  # remove polynomial values
+  full_data = full_data[, grep("^[^(][^:\\^]*$", colnames(full_data), value = T)]
+  
   if(length(unlist(strsplit(values, ";"))) != ncol(full_data) - 1){
     stop("The length of values does not match the number of independend variables.")
   }
