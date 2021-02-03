@@ -1,8 +1,8 @@
 Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM
-Version: 4.0-0.9005
-Date: 2021-02-02
+Version: 4.0-0.9006
+Date: 2021-02-03
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
@@ -13,12 +13,14 @@ Depends:
     R (>= 3.1.0),
     stats,
     MASS,
-	parallel
+	parallel,
+	mlogit,
+	dfidx
 Imports:
     nnet,
 	AER,
 	survival
-Suggests: knitr, rmarkdown, schlegel, ggplot2, devtools, mlogit, dfidx
+Suggests: knitr, rmarkdown, schlegel, ggplot2, devtools
 VignetteBuilder: knitr, rmarkdown
 Additional_repositories: https://benjaminschlegel.github.io/drat/
 URL: https://benjaminschlegel.ch/r/glm-predict/
