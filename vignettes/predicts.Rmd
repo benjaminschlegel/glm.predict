@@ -19,12 +19,6 @@ set.seed(1848)
 
 After estimating a model, it is often not straight forward to interpret the model output. An easy way of interpretation is to use predicted probabilities/values as well as discrete changes (the difference between two of the former). We usually want confidence intervals with those values to have an idea how exact they are and if the are significant or not. There are basically two approaches to estimate confidence intervals: simulation and bootstrap. Both approaches have in common that they draw 1000 (or more) Coefficients ($\beta$s). Those can be used to calculate the predicted value ($\hat{y}$) given a specific set a x-values we are interested in. Depending on the model we need an inverse link function to get the resulting probability/value. With the resulting 1000 (or more) values we are then able to calculate not only the mean but also the confidence interval using quantiles.
 
-If you want to run the examples by yourself, you can install the package **schlegel** from Github.com:
-
-```{r}
-devtools::install_github("benjaminschlegel/schlegel")
-```
-
 
 ## Simulation and Bootstrap explained
 
@@ -38,7 +32,7 @@ A quick example:
 We want to estimate the predicted probability to participate in the Swiss national election 2015 for a 30 year old woman. As younger women participate as often as young men or even more but older women participate less then older men, we include an interaction between age and gender in our logistic regression.
 
 ```{r}
-df_selects = schlegel::selects2015
+df_selects = selects2015
 logit_model = glm(participation ~ age * gender, family = binomial, data = df_selects)
 summary(logit_model)
 ```
