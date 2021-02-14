@@ -29,13 +29,20 @@ dc.glm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma
     }
 	
     type = match.arg(type)
+    
+    if(type == "bootstrap" && "svyglm" %in% class(model)){
+      warning("Boostrap not supported for survey()-models, using simulations instead.")
+      type = "simulation"
+    }
   
     # model type
     model.type = family(model)
     link = model.type[2]  
     
     if(type == "any"){
-      if(nrow(model$data) < 500){
+      if("svyglm" %in% class(model)){
+        type = "simulation"
+      }else if(nrow(model$data) < 500){
         type = "bootstrap"
         message("Type not specified: Using bootstrap as n < 500")
       }else{

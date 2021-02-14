@@ -1,8 +1,8 @@
 Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM
-Version: 4.0-0.9006
-Date: 2021-02-03
+Version: 4.0-0.9007
+Date: 2021-02-14
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
@@ -15,7 +15,8 @@ Depends:
     MASS,
 	parallel,
 	mlogit,
-	dfidx
+	dfidx,
+	survey
 Imports:
     nnet,
 	AER,
