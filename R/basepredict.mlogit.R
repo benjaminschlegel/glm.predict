@@ -1,5 +1,5 @@
 basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL,set.seed=NULL,
-                                type = c("any", "simulation", "bootstrap")){
+                                type = c("any", "simulation", "bootstrap"), summary = TRUE){
   
   # check inputs
   if(sum("mlogit" %in% class(model)) == 0){
@@ -64,6 +64,11 @@ basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NU
     for(j in seq_along(choices)){
       pred[j, i] = e[j] / sum(e)
     }
+  }
+  
+  # return all simulated / bootstrapped values if summary is FALSE
+  if(!summary){
+    return(pred)
   }
   
   confint_lower = (1 - conf.int) / 2

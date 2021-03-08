@@ -9,7 +9,7 @@ The function calculates the predicted value with the confidence interval for a l
 }
 \usage{
 \method{basepredict}{lm}(model, values, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL,
-  type = c("any", "simulation", "bootstrap"))
+  type = c("any", "simulation", "bootstrap"), summary = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,6 +34,9 @@ OPTIONAL set a seed for the random number generator
   \item{type}{
 OPTIONAL choose between simulation and bootstrap, "any" chooses between those two
 according to the number of cases (bootstrap if n < 1000)
+}
+  \item{summary}{
+OPTIONAL if mean/quantiles should be return or all simulated values (default: TRUE)	
 }
 }
 \details{

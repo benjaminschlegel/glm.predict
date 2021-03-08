@@ -12,7 +12,7 @@ mlogit model.
 \usage{
 \method{dc}{mlogit}(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
   sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL,
-  type = c("any", "simulation", "bootstrap"))
+  type = c("any", "simulation", "bootstrap"), summary = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -42,6 +42,9 @@ the values of case 2 as vector in the order how they appear in the summary(model
 }
   \item{type}{
 type is ignored as only simulation is implemented
+}
+  \item{summary}{
+OPTIONAL if mean/quantiles should be return or all simulated values (default: TRUE)	
 }
 }
 \details{

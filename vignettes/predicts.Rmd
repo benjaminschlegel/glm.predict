@@ -117,7 +117,7 @@ The parameter `position` is for discrete changes. If it is null the function ret
 We estimate ordinal logistic regression with the opinion if Switzerland should be part of the European Union (`opinion_eu_membership`) as dependent variable. As independent variable we take the interaction between elected party (`vote_choice`) and left-right self position (`lr_self`) and as control variables age and gender.
 
 ```{r}
-df_selects = schlegel::selects2015
+df_selects = selects2015
 library(MASS)
 ologit_model = polr(opinion_eu_membership ~ vote_choice * lr_self + age + gender, 
                     data = df_selects, Hess = TRUE)

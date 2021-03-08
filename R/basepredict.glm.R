@@ -1,5 +1,5 @@
 basepredict.glm = function(model, values, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, 
-                           type = c("any", "simulation", "bootstrap")){
+                           type = c("any", "simulation", "bootstrap"), summary = TRUE){
   # check inputs
   if(sum("glm" %in% class(model)) == 0){
     stop("model has to be of type glm()")
@@ -63,6 +63,11 @@ basepredict.glm = function(model, values, sim.count = 1000, conf.int = 0.95, sig
     betas_boot = do.call('rbind', lapply(seq_len(sim.count), boot, model))
     # get the predicted probabilities/values with the inverse link function
     pred = calculate_glm_pred(betas_boot, values, link)
+  }
+  
+  # return all simulated / bootstrapped values if summary is FALSE
+  if(!summary){
+    return(pred)
   }
   
   # calculate mean and confident interval

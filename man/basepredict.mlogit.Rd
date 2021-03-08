@@ -10,7 +10,7 @@ mlogit model.
 }
 \usage{
 \method{basepredict}{mlogit}(model, values, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL,
-  type = c("any", "simulation", "bootstrap"))
+  type = c("any", "simulation", "bootstrap"), summary = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,6 +34,9 @@ OPTIONAL set a seed for the random number generator
 }
   \item{type}{
 type is ignored as only simulation is implemented
+}
+  \item{summary}{
+OPTIONAL if mean/quantiles should be return or all simulated values (default: TRUE)	
 }
 }
 \details{

@@ -1,5 +1,5 @@
 dc.glm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL,
-                  type = c("any", "simulation", "bootstrap")){
+                  type = c("any", "simulation", "bootstrap"), summary = TRUE){
     # check inputs
     if(is.null(values) && (is.null(values1) || is.null(values2))){
       stop("Either values1 and values2 or values has to be specified!")
@@ -79,6 +79,10 @@ dc.glm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma
     
     all = cbind(pred1, pred2, diff)
     
+    # return all simulated / bootstrapped values if summary is FALSE
+    if(!summary){
+      return(all)
+    }
     
     confint_lower = (1 - conf.int) / 2 
     result = apply(all, 2, quantile, probs = c(confint_lower, 1 - confint_lower))

@@ -1,5 +1,5 @@
 basepredict.tobit = function(model, values, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL,
-                             type = c("any", "simulation", "bootstrap")){
+                             type = c("any", "simulation", "bootstrap"), summary = TRUE){
   # check inputs
   if(sum("tobit" %in% class(model)) == 0){
     stop("model has to be of type lm()")
@@ -45,6 +45,11 @@ basepredict.tobit = function(model, values, sim.count = 1000, conf.int = 0.95, s
   }
     
     pred = yhat * pnorm(yhat / model$scale) 
+    
+    # return all simulated / bootstrapped values if summary is FALSE
+    if(!summary){
+      return(pred)
+    }
     
     # calculate mean and confident interval
     confint_lower = (1 - conf.int) / 2 
