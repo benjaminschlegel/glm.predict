@@ -72,7 +72,9 @@ basepredict.polr = function(model, values, sim.count = 1000, conf.int = 0.95, si
     kappa[[i]][,] = estim_draw[,l+i]
   }
   
-
+  if(is.null(dim(beta_draw))){
+    beta_draw = as.matrix(beta_draw)
+  }
   for(j in 1:level.count){
     if(j == 1){
       pred[,j] = exp(kappa[[j]] - beta_draw %*% x) / (1 + exp(kappa[[j]]  - beta_draw  %*% x))
