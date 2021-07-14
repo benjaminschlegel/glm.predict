@@ -60,7 +60,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     if(!is.null(levels(full_data[,1]))){
       dv_levels = levels(full_data[,1])
     }else{
-      dv_levels = unique(full_data[,1])
+      dv_levels = levels(as.factor(full_data[, 1]))
     }
   }else{
     dv_levels = NULL
