@@ -33,7 +33,7 @@ A data frame with 5337 rows and 15 variables:
 }
 }
 \source{
-Selects: Post-electoral study - 2015 [Dataset]. Distributed by FORS, Lausanne, 2016. \url{www.selects.ch} \doi{10.23662/FORS-DS-726-5}
+Selects: Post-electoral study - 2015 [Dataset]. Distributed by FORS, Lausanne, 2016. \url{https://www.selects.ch} \doi{10.23662/FORS-DS-726-5}
 }
 \usage{
 selects2015
