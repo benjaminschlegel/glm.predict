@@ -1,4 +1,4 @@
-predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL, doPar = TRUE,
+predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL, doPar = FALSE,
                     type = c("any", "simulation", "bootstrap")){
   if(!is.character(values)){
     stop("values must be given as character!")

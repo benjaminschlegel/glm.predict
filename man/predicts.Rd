@@ -11,7 +11,7 @@ glm, polr or multinom model.
 }
 \usage{
 predicts(model, values, position = NULL, sim.count = 1000, conf.int = 0.95, 
-  sigma = NULL, set.seed = NULL, doPar = TRUE,
+  sigma = NULL, set.seed = NULL, doPar = FALSE,
   type = c("any", "simulation", "bootstrap"))
 }
 \arguments{
@@ -64,7 +64,7 @@ OPTIONAL if the code should run parallel if more than 2 cores are detected
 }
   \item{type}{
 OPTIONAL choose between simulation and bootstrap, "any" chooses between those two
-according to the number of cases (bootstrap if n < 1000)
+according to the number of cases (bootstrap if n < 500)
 }
 }
 \details{
