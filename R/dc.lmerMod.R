@@ -12,10 +12,10 @@ dc.lmerMod = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, s
   if(sum("lmerMod" %in% class(model)) == 0){
     stop("model has to be of type lm()")
   }
-  if(length(values1) != length(coef(model))){
+  if(length(values1) != length(fixef(model))){
     stop("the length of values1 is not identical to the number of coefficient of the model")
   }
-  if(length(values2) != length(coef(model))){
+  if(length(values2) != length(fixef(model))){
     stop("the length of values2 is not identical to the number of coefficient of the model")
   }
   if(!is.numeric(sim.count) | round(sim.count) != sim.count){
