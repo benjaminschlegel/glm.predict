@@ -1,5 +1,6 @@
 basepredict.glmerMod = function(model, values, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, 
                            type = c("any", "simulation", "bootstrap"), summary = TRUE){
+  stop("predicts/basepredict does currently not work with glmer")
   # check inputs
   if(sum("glmerMod" %in% class(model)) == 0){
     stop("model has to be of type glmer()")

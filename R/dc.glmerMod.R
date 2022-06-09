@@ -1,5 +1,6 @@
 dc.glmerMod = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL,
                   type = c("any", "simulation", "bootstrap"), summary = TRUE){
+    stop("predicts/dc does currently not work with glmer")
     # check inputs
     if(is.null(values) && (is.null(values1) || is.null(values2))){
       stop("Either values1 and values2 or values has to be specified!")
