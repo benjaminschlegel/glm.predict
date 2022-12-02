@@ -16,13 +16,24 @@ getValues = function(values, data){
         stop(paste0(varName, " is specified as a factor in the values argument, but it is numeric."))
       }
     }else{
-      if(is_factor[pos] & !grepl("mode", value)){
+      if(is_factor[pos] & !grepl("^mode$", value,ignore.case = TRUE) &
+         !grepl("^median$", value,ignore.case = TRUE) &
+         !grepl("^all$", value,ignore.case = TRUE) & 
+         !grepl("^[0-9,]+$", value,ignore.case = TRUE)){
         stop(paste0(varName, " is specified as numeric in the values argument, but it is a factor/character."))
       }
     }
     var = data[[varName]]
-    if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
-      mode = Mode(var,na.rm=T)
+    if(grepl("^all$",value,ignore.case = TRUE)){ # all
+       if(is.numeric(var)){
+         current.values = unique(var)
+       }else{
+         n = length(levels(var))
+         current.values = getDummies(n)
+       }
+    }
+    else if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
+      mode = Mode(var,na.rm = TRUE)
       if(is.numeric(mode)){
         current.values = mode
       }else{
@@ -35,32 +46,36 @@ getValues = function(values, data){
       if(!is.numeric(var)){
         stop("Cannot calculate the mean of a non numeric variable")
       }
-      current.values = mean(var, na.rm=T)
+      current.values = mean(var, na.rm = TRUE)
     } # mean
     else if(grepl("^median$",value,ignore.case = TRUE)){ # median
-      if(!is.numeric(var)){
-        stop("Cannot calculate the median of a non numeric variable")
+      if(is.numeric(var)){
+        current.values = median(var, na.rm = TRUE)
+      }else{
+        median = median(as.numeric(as.factor(var)), na.rm = TRUE)
+        n = length(levels(var))
+        dummies = getDummies(n)
+        current.values = matrix(dummies[which(levels(var)==median),],nrow=1)
       }
-      current.values = median(var, na.rm=T)
     } # median
     else if(grepl("^Q[0-9]+$",value,ignore.case = TRUE)){ # quantile
       n.quantile = as.numeric(unlist(strsplit(value,"[Q\\]")))[2]
       if(!is.numeric(var)){
         stop("Cannot calculate the quantiles of a non numeric variable")
       }
-      current.values = quantile(var,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = T)
+      current.values = quantile(var,probs=seq(from=0,to=1,length.out =n.quantile+1),na.rm = TRUE)
     } # quantile
     else if(grepl("^min$",value,ignore.case = TRUE)){ # min
       if(!is.numeric(var)){
         stop("Cannot calculate the minimum of a non numeric variable")
       }
-      current.values = min(var,na.rm = T)
+      current.values = min(var,na.rm = TRUE)
     } # min
     else if(grepl("^max$",value,ignore.case = TRUE)){ # max
       if(!is.numeric(var)){
         stop("Cannot calculate the maximum of a non numeric variable")
       }
-      current.values = max(var,na.rm = T)
+      current.values = max(var,na.rm = TRUE)
     } # max
     else if(grepl("^F\\([0-9]+(,[0-9]+)*\\)$",value,ignore.case = TRUE)){ # specific levels of factor
       components = as.numeric(unlist(strsplit(value,"[F\\(,\\)]")))
@@ -112,9 +127,17 @@ getValues = function(values, data){
       }
       components = as.numeric(components)
       current.values = components[1]:components[2]
+      if(!is.numeric(var)){
+        dummies = getDummies(n)
+        current.values = matrix(dummies[current.values,], nrow = length(x))
+      }
     } # from-to
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
       current.values = as.numeric(unlist(strsplit(value,",")))
+      if(!is.numeric(var)){
+        dummies = getDummies(n)
+        current.values = matrix(dummies[current.values,], nrow = length(x))
+      }
     } # value1[, value2 [, ...]
     else if(grepl("^log\\((-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),(-?[0-9]+(\\.[0-9]+)?)\\)$",value)){ # from-to,by
       value = gsub("log\\(", "", value)
