@@ -53,7 +53,7 @@ OPTIONAL if mean/quantiles should be return or all simulated values (default: TR
 }
 
 \examples{
-model1 = lmer(lr_self ~ age + gender + (1 | canton), data=selects2015)
+model1 = lme4::lmer(lr_self ~ age + gender + (1 | canton), data=selects2015)
 summary(model1)
 # predicted left-right position of a 18 year old woman.
 basepredict(model1, c(1,18,1))
