@@ -19,7 +19,7 @@ getValues = function(values, data){
       if(is_factor[pos] & !grepl("^mode$", value,ignore.case = TRUE) &
          !grepl("^median$", value,ignore.case = TRUE) &
          !grepl("^all$", value,ignore.case = TRUE) & 
-         !grepl("^[0-9,]+$", value,ignore.case = TRUE)){
+         !grepl("^[0-9,-]+$", value,ignore.case = TRUE)){
         stop(paste0(varName, " is specified as numeric in the values argument, but it is a factor/character."))
       }
     }
@@ -128,7 +128,7 @@ getValues = function(values, data){
       components = as.numeric(components)
       current.values = components[1]:components[2]
       if(!is.numeric(var)){
-        if(current.values != round(current.values)){
+        if(any(current.values != round(current.values))){
           stop("values for factors need to be whole numbers")
         }
         n = length(levels(var))
@@ -139,7 +139,7 @@ getValues = function(values, data){
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
       current.values = as.numeric(unlist(strsplit(value,",")))
       if(!is.numeric(var)){
-        if(current.values != round(current.values)){
+        if(any(current.values != round(current.values))){
           stop("values for factors need to be whole numbers")
         }
         n = length(levels(var))
