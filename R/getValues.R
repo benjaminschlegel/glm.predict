@@ -26,7 +26,7 @@ getValues = function(values, data){
     var = data[[varName]]
     if(grepl("^all$",value,ignore.case = TRUE)){ # all
        if(is.numeric(var)){
-         current.values = unique(var)
+         current.values = sort(unique(var))
        }else{
          n = length(levels(var))
          current.values = getDummies(n)
