@@ -55,7 +55,7 @@ getValues = function(values, data){
         median = median(as.numeric(var), na.rm = TRUE)
         n = length(levels(var))
         dummies = getDummies(n)
-        current.values = matrix(dummies[which(levels(var)==median),],nrow=1)
+        current.values = matrix(dummies[median,],nrow=1)
       }
     } # median
     else if(grepl("^Q[0-9]+$",value,ignore.case = TRUE)){ # quantile
