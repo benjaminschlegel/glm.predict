@@ -31,7 +31,7 @@ getValues = function(values, data){
          n = length(levels(var))
          current.values = getDummies(n)
        }
-    }
+    } # all
     else if(grepl("^mode$",value,ignore.case = TRUE)){ # Mode
       mode = Mode(var,na.rm = TRUE)
       if(is.numeric(mode)){
@@ -52,7 +52,7 @@ getValues = function(values, data){
       if(is.numeric(var)){
         current.values = median(var, na.rm = TRUE)
       }else{
-        median = median(as.numeric(as.factor(var)), na.rm = TRUE)
+        median = median(as.numeric(var), na.rm = TRUE)
         n = length(levels(var))
         dummies = getDummies(n)
         current.values = matrix(dummies[which(levels(var)==median),],nrow=1)
@@ -133,7 +133,7 @@ getValues = function(values, data){
         }
         n = length(levels(var))
         dummies = getDummies(n)
-        current.values = matrix(dummies[current.values,], nrow = length(x))
+        current.values = matrix(dummies[current.values,], nrow = length(current.values))
       }
     } # from-to
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
@@ -144,7 +144,7 @@ getValues = function(values, data){
         }
         n = length(levels(var))
         dummies = getDummies(n)
-        current.values = matrix(dummies[current.values,], nrow = length(x))
+        current.values = matrix(dummies[current.values,], nrow = length(current.values))
       }
     } # value1[, value2 [, ...]
     else if(grepl("^log\\((-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),(-?[0-9]+(\\.[0-9]+)?)\\)$",value)){ # from-to,by
