@@ -128,6 +128,10 @@ getValues = function(values, data){
       components = as.numeric(components)
       current.values = components[1]:components[2]
       if(!is.numeric(var)){
+        if(current.values != round(current.values)){
+          stop("values for factors need to be whole numbers")
+        }
+        n = length(levels(var))
         dummies = getDummies(n)
         current.values = matrix(dummies[current.values,], nrow = length(x))
       }
@@ -135,6 +139,10 @@ getValues = function(values, data){
     else if(grepl("^(-?[0-9]+(\\.[0-9]+)?)(,-?[0-9]+(\\.[0-9]+)?)*$",value)){ # value1[, value2 [, ...]]
       current.values = as.numeric(unlist(strsplit(value,",")))
       if(!is.numeric(var)){
+        if(current.values != round(current.values)){
+          stop("values for factors need to be whole numbers")
+        }
+        n = length(levels(var))
         dummies = getDummies(n)
         current.values = matrix(dummies[current.values,], nrow = length(x))
       }
