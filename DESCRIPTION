@@ -8,21 +8,21 @@ Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
     the two cases with confidence interval for lm() [linear model], glm() [generalised linear model], glm.nb() [negative binomial model],
 	polr() [ordinal logistic model], multinom() [multinomial model] and tobit() [tobit model],
-	svyglm() [survey-weighted generalised linear models], lmer() [linear multilevel models], glmer() [generlized linear multilevel models] using Monte Carlo simulations or bootstrap. Reference: Bennet A. Zelner (2009) <doi:10.1002/smj.783>.
+	svyglm() [survey-weighted generalised linear models], lmer() [linear multilevel models] using Monte Carlo simulations or bootstrap. Reference: Bennet A. Zelner (2009) <doi:10.1002/smj.783>.
 License: GPL (>=2)
 Depends:
     R (>= 3.5.0),
-    stats,
-    MASS,
+    stats
+Imports:
+    nnet,
+	AER,
+	survival,
+	MASS,
 	parallel,
 	mlogit,
 	dfidx,
 	survey,
 	lme4
-Imports:
-    nnet,
-	AER,
-	survival
 Suggests: knitr, rmarkdown, ggplot2, devtools
 VignetteBuilder: knitr, rmarkdown
 LazyData: true
