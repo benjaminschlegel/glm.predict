@@ -61,7 +61,7 @@ OPTIONAL if mean/quantiles should be return or all simulated values (default: TR
 }
 
 \examples{
-model1 = lmer(lr_self ~ age + gender + (1 | canton), data=selects2015)
+model1 = lme4::lmer(lr_self ~ age + gender + (1 | canton), data=selects2015)
 summary(model1)
 # comparing a 20 year old woman with a 20 year old man considering their left-right position
 dc(model1, values1 = c(1,20,1),

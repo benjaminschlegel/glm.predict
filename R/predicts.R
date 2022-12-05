@@ -13,6 +13,10 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     values = paste(values, collapse = ";")
   }
   
+  if("tobit" %in% class(model)){
+    colnames(full_data)[1] = "y"
+  }
+  
   # reshape mlogit data
   if("dfidx" %in% class(full_data)){ 
     choices = levels(full_data$idx[[2]])
@@ -30,7 +34,6 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   
   # remove polynomial values
   full_data = full_data[, grep("^[^(][^:\\^]*$", colnames(full_data), value = T)]
-  
   if(length(unlist(strsplit(values, ";"))) != ncol(full_data) - 1){
     stop("The length of values does not match the number of independend variables.")
   }
