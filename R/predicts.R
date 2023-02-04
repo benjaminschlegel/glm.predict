@@ -1,4 +1,4 @@
-predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL, doPar = FALSE,
+predicts = function(model, values, position = NULL, sim.count = 1000, conf.int=0.95, sigma = NULL, set.seed = NULL, doPar = FALSE,
                     type = c("any", "simulation", "bootstrap")){
   if(!is.character(values)){
     stop("values must be given as character!")
@@ -33,7 +33,7 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
   }
   
   # remove polynomial values
-  full_data = full_data[, grep("^[^(][^:\\^]*$", colnames(full_data), value = T)]
+  full_data = full_data[, grep("^[^(][^:\\^]*$", colnames(full_data), value = TRUE)]
   if(length(unlist(strsplit(values, ";"))) != ncol(full_data) - 1){
     stop("The length of values does not match the number of independend variables.")
   }
@@ -42,8 +42,8 @@ predicts = function(model, values, position=NULL, sim.count=1000, conf.int=0.95,
     stop("position must be a whole number or NULL.")
   }
   
-  if(inherits(model, "multinom")){
-    doPar = F
+  if(inherits(model, "multinom") && doPar){
+    doPar = FALSE
     warning("Parallel version not supported for multinom() models. Setting doPar to FALSE.")
   }
   
