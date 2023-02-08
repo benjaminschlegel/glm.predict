@@ -56,7 +56,7 @@ predicts = function(model, values, position = NULL, sim.count = 1000, conf.int=0
   type = match.arg(type)
   
   if(type == "any"){
-    if(nrow(model.frame(model)) < 500){
+    if(nrow(full_data) < 500){
       type = "bootstrap"
       message("Type not specified: Using bootstrap as n < 500")
     }else{
