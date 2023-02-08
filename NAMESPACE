@@ -1,4 +1,4 @@
-import(MASS,nnet,stats,parallel,AER,survival,mlogit,survey,lme4,VGAM)
+import(MASS,nnet,stats,parallel,AER,survival,mlogit,survey,lme4)
 importFrom(dfidx, dfidx)
 importFrom(dfidx, idx)
 importFrom(dfidx, idx_name)
