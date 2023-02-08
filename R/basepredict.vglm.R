@@ -21,7 +21,7 @@ basepredict.vglm = function(model, values, sim.count = 1000, conf.int = 0.95, si
   type = match.arg(type)
   
   if(type == "any"){
-    if(nrow(VGLAM::model.frame(model)) < 500){
+    if(nrow(VGAM::model.frame(model)) < 500){
       type = "bootstrap"
       message("Type not specified: Using bootstrap as n < 500")
     }else{
