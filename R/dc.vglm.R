@@ -30,7 +30,7 @@ dc.vglm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigm
   type = match.arg(type)
   
   if(type == "any"){
-    if(nrow(model.frame(model)) < 500){
+    if(nrow(VGAM::model.frame(model)) < 500){
       type = "bootstrap"
       message("Type not specified: Using bootstrap as n < 500")
     }else{
@@ -78,7 +78,7 @@ dc.vglm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigm
     estim_draw = MASS::mvrnorm(sim.count, estim, sigma)
   }else{ # bootstrap
     boot = function(x, model){
-      data = model.frame(model)
+      data = VGAM::model.frame(model)
       colnames(data)[1] = gsub("ordered\\(", "", colnames(data)[1])
       colnames(data)[1] = gsub("\\)", "", colnames(data)[1])
       sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
