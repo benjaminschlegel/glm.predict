@@ -1,7 +1,7 @@
 Package: glm.predict
 Type: Package
 Title: Predicted Values and Discrete Changes for GLM
-Version: 4.2-1.9010
+Version: 4.2-1.9011
 Date: 2023-02-08
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>

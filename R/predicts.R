@@ -88,7 +88,7 @@ predicts = function(model, values, position = NULL, sim.count = 1000, conf.int=0
   for(i in char_pos){
     full_data[,i] = as.factor(full_data[,i])
   }
-  temp = glm.predict:::getBaseCombinations(full_data, matrix, values, model, dv_levels, position)
+  temp = getBaseCombinations(full_data, matrix, values, model, dv_levels, position)
   result = temp[["result"]]
   if(is.null(position)){
     base.combinations = temp[["base.combinations"]]
