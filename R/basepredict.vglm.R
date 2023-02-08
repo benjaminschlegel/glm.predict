@@ -80,6 +80,8 @@ basepredict.vglm = function(model, values, sim.count = 1000, conf.int = 0.95, si
   }
   
   if(length(values) != ncol(betaByKappa[[1]])){
+    print(values)
+    print(ncol(betaByKappa[[1]]))
     stop("the length of values is not identical to the number of coefficient of the model")
   }
   
