@@ -9,6 +9,12 @@ getCombinations = function(matrix, base.combinations, model, dv_levels){
     ncol = length(unique(cnames))
   }
   
+  if(inherits(model,"vglm")){
+    cnames = colnames(matrix)
+    cnames = gsub(":[0-9]+", "", cnames)
+    ncol = length(unique(cnames)) - 1
+  }
+  
   if(!inherits(model,"polr") & !inherits(model,"vglm")){
     combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol)
     combinations[,1] = 1
