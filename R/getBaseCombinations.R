@@ -22,6 +22,9 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
       cnames = gsub(paste0(":", choice), "", cnames)
     }
     cnames = unique(cnames)
+  }else if(inherits(model, "vglm")){
+    cnames = colnames(matrix)
+    cnames = unique(gsub(":[1-9]+", "", cnames))
   }else{
     cnames = colnames(matrix)
   }
