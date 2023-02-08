@@ -9,10 +9,12 @@ getCombinations = function(matrix, base.combinations, model, dv_levels){
     ncol = length(unique(cnames))
   }
   
-  if(!inherits(model,"polr")){
+  if(!inherits(model,"polr") & !inherits(model,"vglm")){
     combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol)
     combinations[,1] = 1
     c = c + 1
+  }else if(inherits(model,"vglm")){
+    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol)
   }else{
     combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol - 1)
   }
