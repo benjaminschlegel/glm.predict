@@ -22,7 +22,8 @@ Imports:
 	mlogit,
 	dfidx,
 	survey,
-	lme4
+	lme4,
+	VGAM
 Suggests: knitr, rmarkdown, ggplot2, devtools
 VignetteBuilder: knitr, rmarkdown
 LazyData: true
