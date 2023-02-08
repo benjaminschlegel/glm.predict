@@ -97,12 +97,12 @@ dc.vglm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigm
     kappa[[i]][,] = estim_draw[,i]
   }
   
-  if(length(values1) != ncol(betaByKappa[[1]])){
-    stop("the length of values1 is not identical to the number of coefficient of the model")
-  }
-  if(length(values2) != ncol(betaByKappa[[1]])){
-    stop("the length of values2 is not identical to the number of coefficient of the model")
-  }
+  #if(length(values1) != ncol(betaByKappa[[1]])){
+  #  stop("the length of values1 is not identical to the number of coefficient of the model")
+  #}
+  #if(length(values2) != ncol(betaByKappa[[1]])){
+  #  stop("the length of values2 is not identical to the number of coefficient of the model")
+  #}
   
   # calculate the discrete changes
   for(j in 1:level.count){
