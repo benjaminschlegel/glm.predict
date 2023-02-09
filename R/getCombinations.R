@@ -28,7 +28,8 @@ getCombinations = function(matrix, base.combinations, model, dv_levels){
   c = c + ncol(base.combinations)
   
   # add interactions and polygons
-  if(ncol > ncol(base.combinations) + 1){ # add interactions
+  cutpoint = ifelse(inherits(model,"vglm"), ncol(base.combinations), ncol(base.combinations) + 1)
+  if(ncol > cutpoint){ # add interactions
     cnames = unique(gsub(":[0-9]+", "",colnames(matrix)))
     for(name in cnames){
       if(grepl(":", name)){
