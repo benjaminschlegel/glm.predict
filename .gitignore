@@ -43,3 +43,11 @@ Temporary Items
 .apdisk
 doc
 Meta
+.Rproj.user
+/doc/
+/Meta/
+inst/doc
+.Rhistory
+.Rdata
+.httr-oauth
+.quarto

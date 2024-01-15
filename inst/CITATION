@@ -1,13 +1,14 @@
 citHeader("Please cite glm.predict in publications as:")
 
-citEntry(
-  entry="Manual",
+bibentry(
+  bibtype="Manual",
   title = "glm.predict: Predicted Values and Discrete Changes for Regression Models",
-  author = as.person("Benjamin E. Schlegel"),
+  author = person("Benjamin E.", "Schlegel", role = c("aut", "cre"),
+            email  = "kontakt@benjaminschlegel.ch"),
   year = "2024",
   note = "R package version 4.3-0",
   organization = "Institut of Political Science",
   address = "Zurich, Switzerland",
-  textVersion = "Schlegel, Benjamin E. (2024). glm.predict: Predicted Values and Discrete Changes for Regression Models. R package version 4.3-0. https://cran.r-project.org/package=glm.predict",
-  url = "https://cran.r-project.org/package=glm.predict"
+  url = "https://cran.r-project.org/package=glm.predict",
+  key="glm.predict"
 )

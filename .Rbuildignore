@@ -3,3 +3,5 @@
 ^doc$
 ^Meta$
 ^CRAN-SUBMISSION$
+^.*\.Rproj$
+^\.Rproj\.user$

@@ -24,9 +24,12 @@ Imports:
 	survey,
 	lme4,
 	VGAM
-Suggests: knitr, rmarkdown, ggplot2, devtools
-VignetteBuilder: knitr, rmarkdown
+Suggests: 
+    ggplot2,
+    devtools,
+    knitr,
+    rmarkdown
 LazyData: true
 URL: https://github.com/benjaminschlegel/glm.predict/
 Language: en-US
-RoxygenNote: 7.1.1
+VignetteBuilder: knitr
