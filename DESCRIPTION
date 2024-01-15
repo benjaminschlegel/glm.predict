@@ -1,7 +1,7 @@
 Package: glm.predict
 Type: Package
-Title: Predicted Values and Discrete Changes for GLM
-Version: 4.2-1.9014
+Title: Predicted Values and Discrete Changes for Regression Models.
+Version: 4.3-0
 Date: 2023-02-09
 Author: Benjamin Schlegel [aut,cre]
 Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
