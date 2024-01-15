@@ -3,8 +3,8 @@ Type: Package
 Title: Predicted Values and Discrete Changes for Regression Models.
 Version: 4.3-0
 Date: 2023-02-09
-Author: Benjamin Schlegel [aut,cre]
-Maintainer: Benjamin Schlegel <kontakt@benjaminschlegel.ch>
+Author: Benjamin E. Schlegel [aut,cre]
+Maintainer: Benjamin E. Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
     the two cases with confidence interval for lm() [linear model], glm() [generalised linear model], glm.nb() [negative binomial model],
 	polr() [ordinal logistic model], multinom() [multinomial model] and tobit() [tobit model],
