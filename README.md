@@ -1,13 +1,13 @@
 # glm.predict
-R GNU Package to simulate/bootstrap predicted values/probabilies and discrete changes for lm(), glm(), glm.nb(), polr(), multinom(), tobit() and lmer() models. 
+R GNU Package to simulate/bootstrap predicted values/probabilities and discrete changes for lm(), glm(), glm.nb(), polr(), multinom(), tobit() and lmer() models. 
 
 ## Example
 
-Here an example how you can use the function `predicts()`. First we estimate an logistic regression to predict the gender of a person using hight, smoking and pulse as independent variables.
+Here an example how you can use the function `predicts()`. First we estimate an logistic regression to predict the gender of a person using height, smoking and pulse as independent variables.
 
 `model1 = glm(Sex ~ Height + Smoke + Pulse, data=MASS::survey, family=binomial(link=logit))`
 
-Now we can estimate predicted probabilies. For Height we take 150, 170 and 190, for Smoke we take all levels of the factor and for Pulse we take the average value of the data. We set a seed to always get the same results.
+Now we can estimate predicted probabilities. For Height we take 150, 170 and 190, for Smoke we take all levels of the factor and for Pulse we take the average value of the data. We set a seed to always get the same results.
 
 ```
 library(glm.predict)
