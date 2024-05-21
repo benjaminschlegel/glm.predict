@@ -47,7 +47,12 @@ basepredict.lm = function(model, values, sim.count = 1000, conf.int = 0.95, sigm
     boot = function(x, model){
       data = model.frame(model)
       sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
-      coef(update(model, data = sample_data))
+      if("(weights)" %in% colnames(data)){
+        coef(update(model, data = sample_data, weights = `(weights)`))
+      }else{
+        coef(update(model, data = sample_data))
+      }
+      
     }
     betas_boot = do.call('rbind', lapply(seq_len(sim.count), boot, model))
     # get the predicted probabilities/values with the inverse link function

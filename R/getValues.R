@@ -132,6 +132,10 @@ getValues = function(values, data){
           stop("values for factors need to be whole numbers")
         }
         n = length(levels(var))
+        if(any(current.values < 1) | any(current.values > n)){
+          stop(paste0("values for factor at position ", pos, " need to be in the range 1 to ", n))
+        }
+        
         dummies = getDummies(n)
         current.values = matrix(dummies[current.values,], nrow = length(current.values))
       }
@@ -143,6 +147,9 @@ getValues = function(values, data){
           stop("values for factors need to be whole numbers")
         }
         n = length(levels(var))
+        if(any(current.values < 1) | any(current.values > n)){
+          stop(paste0("value(s) for factor at position ", pos, " need(s) to be in the range 1 to ", n))
+        }
         dummies = getDummies(n)
         current.values = matrix(dummies[current.values,], nrow = length(current.values))
       }

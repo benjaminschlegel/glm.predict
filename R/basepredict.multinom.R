@@ -53,7 +53,12 @@ basepredict.multinom = function(model,values,sim.count=1000,conf.int=0.95,sigma=
     boot = function(x, model){
       data = model.frame(model)
       sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
-      unlist(as.list(t(coef(update(model, data = sample_data)))))
+      if("(weights)" %in% colnames(data)){
+        unlist(as.list(t(coef(update(model, data = sample_data, weights = `(weights)`)))))
+      }else{
+        unlist(as.list(t(coef(update(model, data = sample_data)))))
+      }
+      
       
     }
     betas_draw = do.call('rbind', lapply(seq_len(sim.count), boot, model))
