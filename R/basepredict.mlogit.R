@@ -1,4 +1,4 @@
-basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NULL,set.seed=NULL,
+basepredict.mlogit = function(model, values, sim.count=1000, conf.int=0.95, sigma=NULL, set.seed=NULL,
                                 type = c("any", "simulation", "bootstrap"), summary = TRUE){
   
   # check inputs
@@ -20,6 +20,12 @@ basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NU
   }
   if(!is.null(set.seed) & !is.numeric(set.seed)){
     stop("set.seed must be numeric")
+  }
+  
+  for(v in values){
+    if(length(v) != length(choices)-1 & length(v) != 1){
+      stop("values need to be of length 1 or length of choices-1")
+    }
   }
   
   type = match.arg(type)
@@ -58,7 +64,7 @@ basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NU
       sim_temp = cbind(sim_temp, current_betas[j + seq_len(n)])
     }
     
-    yhat = c(0, sim_temp %*% values)
+    yhat = c(0, diag(sim_temp %*% t(as.matrix(expand.grid(values)))))
     e = exp(yhat)
     
     for(j in seq_along(choices)){
@@ -66,7 +72,7 @@ basepredict.mlogit = function(model,values,sim.count=1000,conf.int=0.95,sigma=NU
     }
   }
   
-  # return all simulated / bootstrapped values if summary is FALSE
+  # return all simulated
   if(!summary){
     return(pred)
   }

@@ -13,6 +13,7 @@ dc.mlogit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, si
   if(sum("mlogit" %in% class(model)) == 0){
     stop("model has to be of type mlogit()")
   }
+  
   choices = names(model$freq)
   beta_names = names(coef(model))
   n_multinomial = do.call(sum, lapply(choices, grepl, beta_names))
@@ -31,6 +32,12 @@ dc.mlogit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, si
   }
   if(!is.null(set.seed) & !is.numeric(set.seed)){
     stop("set.seed must be numeric")
+  }
+  
+  for(v in values){
+    if(length(v) != length(choices)-1 & length(v) != 1){
+      stop("values need to be of length 1 or length of choices-1")
+    }
   }
   
   type = match.arg(type)
@@ -66,8 +73,8 @@ dc.mlogit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, si
       sim_temp = cbind(sim_temp, current_betas[j + seq_len(n)])
     }
     
-    yhat1 = c(0, sim_temp %*% values1)
-    yhat2 = c(0, sim_temp %*% values2)
+    yhat1 = c(0, diag(sim_temp %*% t(as.matrix(expand.grid(values1)))))
+    yhat2 = c(0, diag(sim_temp %*% t(as.matrix(expand.grid(values2)))))
     e1 = exp(yhat1)
     e2 = exp(yhat2)
     

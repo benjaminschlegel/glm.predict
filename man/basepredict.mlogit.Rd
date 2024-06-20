@@ -56,10 +56,10 @@ OPTIONAL if mean/quantiles should be return or all simulated values (default: TR
 \dontrun{
 # devtools::install_github("benjaminschlegel/schlegel")
 df_selects = schlegel::selects2015
-df_selects_withoutNA = df_selects %>% 
-  filter(vote_choice != "other") %>% 
-  mutate(vote_choice = factor(vote_choice)) %>% 
-  select(age, gender, vote_choice, starts_with("lr_")) %>% 
+df_selects_withoutNA = df_selects |>
+  dplyr::filter(vote_choice != "other") |> 
+  dplyr::mutate(vote_choice = factor(vote_choice)) |> 
+  dplyr::select(age, gender, vote_choice, starts_with("lr_")) |>
   na.omit()
 mlogit_data = dfidx::dfidx(df_selects_withoutNA, varying = 5:11, 
                     sep = "_", shape = "wide", 
@@ -71,7 +71,7 @@ model1 = mlogit::mlogit(vote_choice ~ distance | lr_self +
                           gender, data = mlogit_data)
 summary(model1)
 # predicted probability of a left male person with a distance of 2
-basepredict(model1, c(1, 2, 0, 0))
+basepredict(model1, list(1, c(2, 5, 5, 5, 5, 5), 0, 0))
 }
 }
 

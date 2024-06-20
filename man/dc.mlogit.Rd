@@ -20,7 +20,7 @@ mlogit model.
 the model-Object generated with mlogit()
 }
   \item{values}{
-the values of case 1 and 2 as vector in the order how they appear in the summary(model) Estimate. Values is if values1 and values2 are specified after each other in the same vector. Either values or values1 and values2 have to be specified.
+the values of case 1 and 2 as list in the order how they appear in the summary(model) Estimate. Values is if values1 and values2 are specified after each other in the same vector. Either values or values1 and values2 have to be specified.
 }
   \item{sim.count}{
 OPTIONAL numbers of simulations to be done by the function. default: 1000
@@ -35,10 +35,10 @@ OPTIONAL the variance-covariance matrix, can be changed when having for example 
 OPTIONAL set a seed for the random number generator
 }
   \item{values1}{
-the values of case 1 as vector in the order how they appear in the summary(model) Estimate. Has to be defined if values is not defined.
+the values of case 1 as list in the order how they appear in the summary(model) Estimate. Has to be defined if values is not defined. Can be single values or a vector of values with the length of choices - 1 for condition variables.
 }
   \item{values2}{
-the values of case 2 as vector in the order how they appear in the summary(model) Estimate. Has to be defined if values is not defined.
+the values of case 2 as list in the order how they appear in the summary(model) Estimate. Has to be defined if values is not defined. Can be single values or a vector of values with the length of choices - 1 for condition variables.
 }
   \item{type}{
 type is ignored as only simulation is implemented
@@ -79,7 +79,7 @@ model1 = mlogit::mlogit(vote_choice ~ distance | lr_self +
                           gender, data = mlogit_data)
 summary(model1)
 # predicted probability of a left male person with a distance of 2
-dc(model1, c(1, 2, 0, 0, 1, 2, 10, 0))
+dc(model1, list(1, c(2, 5, 5, 5, 5, 5), 0, 0, 1, c(2, 5, 5, 5, 5, 5), 10, 0))
 }
 }
 
