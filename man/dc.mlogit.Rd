@@ -62,12 +62,10 @@ OPTIONAL if mean/quantiles should be return or all simulated values (default: TR
 
 \examples{
 \dontrun{
-# devtools::install_github("benjaminschlegel/schlegel")
-df_selects = schlegel::selects2015
-df_selects_withoutNA = df_selects %>% 
-  filter(vote_choice != "other") %>% 
-  mutate(vote_choice = factor(vote_choice)) %>% 
-  select(age, gender, vote_choice, starts_with("lr_")) %>% 
+df_selects_withoutNA = selects2015 |>
+  filter(vote_choice != "other") |> 
+  mutate(vote_choice = factor(vote_choice)) |>
+  select(age, gender, vote_choice, starts_with("lr_")) |>
   na.omit()
 mlogit_data = dfidx::dfidx(df_selects_withoutNA, varying = 5:11, 
                     sep = "_", shape = "wide", 

@@ -54,9 +54,7 @@ OPTIONAL if mean/quantiles should be return or all simulated values (default: TR
 
 \examples{
 \dontrun{
-# devtools::install_github("benjaminschlegel/schlegel")
-df_selects = schlegel::selects2015
-df_selects_withoutNA = df_selects |>
+df_selects_withoutNA = selects2015 |>
   dplyr::filter(vote_choice != "other") |> 
   dplyr::mutate(vote_choice = factor(vote_choice)) |> 
   dplyr::select(age, gender, vote_choice, starts_with("lr_")) |>
