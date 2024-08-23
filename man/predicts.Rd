@@ -33,6 +33,7 @@ The values must be in the following way: \emph{"value1;value2;value3;..."}. Each
 	\item \strong{from-to,by}: takes all values from "from" to "to" with the distance "by" (for example: "160-180,5" --> 160,165,170,175,180)
 	\item \strong{from-to}: same as from-to,by with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8); also works for factors and takes the given levels form their position
 	\item \strong{value1,value2,value3,...}: takes the given values (for example: "160,180" --> 160,180); also works for factors and takes the given levels form their position
+	\item \strong{constant,|value1, value2, value3|, constant,...}: for conditional logit models, all levels should be held constant besides one level which must be surounded by || and containing all values to simulate for. (for example: "5,|1,2,3,4,5|,5,5,5,5" for a choice with 7 levels (6 without the base category))
 	\item \strong{value1}: takes the given value (for example: "5.34" --> 5.34); also works for factors and takes the given level form its position
 		\item \strong{log(from-to,by)}: takes the log of all values from "from" to "to" with the distance "by" (for example: "160-180,5" --> 160,165,170,175,180)
 	\item \strong{log(from-to)}: same as log(from-to,by) with by=1 (for example: "2-8" --> 2,3,4,5,6,7,8)
