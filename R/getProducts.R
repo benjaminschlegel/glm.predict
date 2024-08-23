@@ -8,7 +8,9 @@ getProducts = function(value, position = NULL){
   
   for(i in 1:n){
     variable = values.list[[i]]
-    if(is.factor[i]){
+    if(is.list(variable)){
+      variable.length = length(variable[[which(sapply(variable, length) > 1)]])
+    }else if(is.factor[i]){
       variable.length = length(variable[,1])
     }else{
       variable.length = length(variable)

@@ -30,7 +30,7 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
   }
   
   value.names = grep("^[^(][^:\\^]*$",cnames, value = T)
-  base.combinations = matrix(NA, nrow = rows, ncol = length(value.names))
+  base.combinations = as.data.frame(matrix(NA, nrow = rows, ncol = length(value.names)))
   colnames(base.combinations) = value.names
   if(!is.null(position)){
     base.combinations_1 = base.combinations_2 = base.combinations
@@ -70,12 +70,22 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         c = c + length(current.values[f.v1,])
       }else if(!is.null(position) && i == position){
         v2 = v1 + 1
-        base.combinations_1[r,c:(c + length(current.values[v1]) - 1)] = current.values[v1]
-        base.combinations_2[r,c:(c + length(current.values[v1]) - 1)] = current.values[v2]
+        if(is.list(current.values)){
+          base.combinations_1[r,c:(c + length(current.values[v1]) - 1)][[1]] = list(sapply(current.values, function(x){ ifelse(length(x) == 1, x, x[v1]) }))
+          base.combinations_2[r,c:(c + length(current.values[v1]) - 1)][[1]] = list(sapply(current.values, function(x){ ifelse(length(x) == 1, x, x[v2]) }))
+          
+          # labels
+          result[r,data.frame.position] = current.values[[which(sapply(current.values, length) > 1)]][v1]
+          result[r,data.frame.position+1] = current.values[[which(sapply(current.values, length) > 1)]][v2]
+        }else{
+          base.combinations_1[r,c:(c + length(current.values[v1]) - 1)][[1]] = current.values[v1]
+          base.combinations_2[r,c:(c + length(current.values[v1]) - 1)][[1]] = current.values[v2]
+          
+          # labels
+          result[r,data.frame.position] = current.values[v1]
+          result[r,data.frame.position+1] = current.values[v2]
+        }
         
-        # labels
-        result[r,data.frame.position] = current.values[v1]
-        result[r,data.frame.position+1] = current.values[v2]
         data.frame.position = data.frame.position + 2
         c = c + length(current.values[v1])
       }else if(is.factor[i]){
@@ -97,17 +107,35 @@ getBaseCombinations = function(data, matrix, values, model, dv_levels = NULL, po
         data.frame.position = data.frame.position + 1
       }else{
         if(is.null(position)){
-          base.combinations[r, c] = current.values[v1]
+          if(is.list(current.values)){
+            base.combinations[r, c][[1]] = list(sapply(current.values, function(x){ ifelse(length(x) == 1, x, x[v1]) }))
+          }else{
+            base.combinations[r, c] = current.values[v1]
+          }
+          
         }else{
-          base.combinations_1[r, c] = current.values[v1]
-          base.combinations_2[r, c] = current.values[v1]
+          if(is.list(current.values)){
+            base.combinations_1[r, c][[1]] = list(sapply(current.values, function(x){ ifelse(length(x) == 1, x, x[v1]) }))
+            base.combinations_2[r, c][[1]] = list(sapply(current.values, function(x){ ifelse(length(x) == 1, x, x[v1]) }))
+          }else{
+            base.combinations_1[r, c] = current.values[v1]
+            base.combinations_2[r, c] = current.values[v1]
+          }
         }
         
         # labels
         if(data.frame.position %in% log.pos){
-          result[r, data.frame.position] = exp(current.values[v1])
+          if(is.list(current.values)){
+            result[r, data.frame.position] = exp(current.values[[which(sapply(current.values, length) > 1)]][v1])
+          }else{
+            result[r, data.frame.position] = exp(current.values[v1])
+          }
         }else{
-          result[r, data.frame.position] = current.values[v1]
+          if(is.list(current.values)){
+            result[r, data.frame.position] = current.values[[which(sapply(current.values, length) > 1)]][v1]
+          }else{
+            result[r, data.frame.position] = current.values[v1]
+          }
         }
         
         data.frame.position = data.frame.position + 1

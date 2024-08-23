@@ -153,7 +153,23 @@ getValues = function(values, data){
         dummies = getDummies(n)
         current.values = matrix(dummies[current.values,], nrow = length(current.values))
       }
-    } # value1[, value2 [, ...]
+    } # value1[, value2 [, ...]]
+    else if(grepl("^\\|?(-?[0-9]+(\\.[0-9]+)?)\\|?(,\\|?-?[0-9]+(\\.[0-9]+)?\\|?)*$",value) &
+            length(unlist(gregexpr("\\|", value))) == 2){
+      current.values = unlist(strsplit(value,","))
+      start = which(grepl("^\\|",current.values))
+      end = which(grepl("\\|$",current.values))
+      cond_values = gsub("\\|","",current.values[start:end]) |> as.numeric()
+      if(length(cond_values) == 1){
+        current.values[start] = cond_values
+        current.values = as.list(suppressWarnings(as.numeric(current.values)))
+      }else{
+        current.values = current.values[-c((start+1):end)]
+        current.values = as.list(suppressWarnings(as.numeric(current.values)))
+        current.values[[start]] = cond_values
+      }
+      
+    } # value_level1, value_level2, |value1[, value2 [, ...]]|, value_level4 (for conditional logit)
     else if(grepl("^log\\((-?[0-9]+(\\.[0-9]+)?)-(-?[0-9]+(\\.[0-9]+)?),(-?[0-9]+(\\.[0-9]+)?)\\)$",value)){ # from-to,by
       value = gsub("log\\(", "", value)
       value = gsub("\\)", "", value)

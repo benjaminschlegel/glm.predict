@@ -16,13 +16,13 @@ getCombinations = function(matrix, base.combinations, model, dv_levels){
   }
   
   if(!inherits(model,"polr") & !inherits(model,"vglm")){
-    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol)
+    combinations = as.data.frame(matrix(NA, nrow = nrow(base.combinations), ncol = ncol))
     combinations[,1] = 1
     c = c + 1
   }else if(inherits(model,"vglm")){
-    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol)
+    combinations = as.data.frame(matrix(NA, nrow = nrow(base.combinations), ncol = ncol))
   }else{
-    combinations = matrix(NA, nrow = nrow(base.combinations), ncol = ncol - 1)
+    combinations = as.data.frame(matrix(NA, nrow = nrow(base.combinations), ncol = ncol - 1))
   }
   combinations[,c : (c + ncol(base.combinations) - 1)] = base.combinations
   c = c + ncol(base.combinations)
