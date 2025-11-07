@@ -83,7 +83,8 @@ dc.vglm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigm
       colnames(data)[1] = gsub("\\)", "", colnames(data)[1])
       sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
       if("(weights)" %in% colnames(data)){
-        model_updated = coef(update(model, data = sample_data, weights = `(weights)`))
+        w <- sample_data[["(weights)"]]
+        model_updated = coef(update(model, data = sample_data, weights = w))
       }else{
         model_updated = coef(update(model, data = sample_data))
       }

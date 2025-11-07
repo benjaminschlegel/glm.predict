@@ -69,7 +69,8 @@ dc.glm = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma
         data = model$data
         sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
         if("(weights)" %in% colnames(data)){
-          coef(update(model, data = sample_data, weights = `(weights)`))
+          w <- sample_data[["(weights)"]]
+          coef(update(model, data = sample_data, weights = w))
         }else{
           coef(update(model, data = sample_data))
         }

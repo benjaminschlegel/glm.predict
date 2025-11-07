@@ -78,9 +78,10 @@ dc.polr = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigm
       data = model.frame(model)
       sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
       if("(weights)" %in% colnames(data)){
-        model_update =  coef(update(model, data = sample_data, weights = `(weights)`))
+        w <- sample_data[["(weights)"]]
+        model_updated = coef(update(model, data = sample_data, weights = w))
       }else{
-        model_update = coef(update(model, data = sample_data))
+        model_updated = coef(update(model, data = sample_data))
       }
       c(model_updated$coefficients, model_updated$zeta)
     }
