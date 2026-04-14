@@ -3,7 +3,12 @@ Type: Package
 Title: Predicted Values and Discrete Changes for Regression Models
 Version: 4.3-2
 Date: 2025-11-07
-Author: Benjamin E. Schlegel [aut,cre]
+Authors@R: person(given = c("Benjamin", "E."),
+                  family = "Schlegel",
+                  role = c("aut", "cre"),
+                  email = "kontakt@benjaminschlegel.ch",
+				  comment = c(ORCID = "0000-0002-5789-8996")
+				  )
 Maintainer: Benjamin E. Schlegel <kontakt@benjaminschlegel.ch>
 Description: Functions to calculate predicted values and the difference between
     the two cases with confidence interval for lm() [linear model], glm() [generalized linear model], glm.nb() [negative binomial model],
