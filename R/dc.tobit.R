@@ -42,7 +42,7 @@ dc.tobit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sig
     }
     if(nrow(sigma) != length(values1)){
       warning("sigma and values do not match, ignoring the specified sigma")
-      sigma = vcov(model)
+      sigma = stats::vcov(model)
       sigma = sigma[-nrow(sigma), ]
       sigma = sigma[, -ncol(sigma)]
     }

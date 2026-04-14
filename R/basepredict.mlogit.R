@@ -38,7 +38,7 @@ basepredict.mlogit = function(model, values, sim.count=1000, conf.int=0.95, sigm
   
   betas = coef(model)
   if(is.null(sigma)){
-    sigma = vcov(model)
+    sigma = stats::vcov(model)
   }
   
   # simulation

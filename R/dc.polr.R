@@ -46,7 +46,7 @@ dc.polr = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigm
   l = length(values1)
   n = sim.count
   if(is.null(sigma)){
-    sigma = vcov(model)
+    sigma = stats::vcov(model)
   }
   level.count = length(model$lev)
   kappa.count = level.count - 1

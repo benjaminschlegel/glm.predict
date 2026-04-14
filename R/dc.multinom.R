@@ -1,6 +1,6 @@
 dc.multinom = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, sigma = NULL, set.seed = NULL, values1 = NULL, values2 = NULL,
                        type = c("any", "simulation", "bootstrap"), summary = TRUE){
-  
+
   # check inputs
   if(is.null(values) && (is.null(values1) || is.null(values2))){
     stop("Either values1 and values2 or values has to be specified!")
@@ -28,9 +28,9 @@ dc.multinom = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
   if(!is.null(set.seed) & !is.numeric(set.seed)){
     stop("set.seed must be numeric")
   }
-  
+
   type = match.arg(type)
-  
+
   if(type == "any"){
     if(nrow(model.frame(model)) < 500){
       type = "bootstrap"
@@ -40,26 +40,27 @@ dc.multinom = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
       message("Type not specified: Using simulation as n >= 500")
     }
   }
-  
+
   betas = coef(model)
   if(is.null(sigma)){
-    sigma = vcov(model)
+    sigma = stats::vcov(model)
   }
   n.coefs = ncol(betas)
   n = nrow(betas)
-  
+
   if(type == "simulation"){
+    # set seed once, not per category (previously reset every iteration,
+    # which destroyed independence across response categories)
+    if(!is.null(set.seed)){
+      set.seed(set.seed)
+    }
     betas_draw = matrix(nrow = sim.count, ncol = n.coefs * n)
-    
-    for(j in 1:n){
-      from = (n.coefs*(j-1)+1)
-      to = (n.coefs*j)
-      if(!is.null(set.seed)){
-        set.seed(set.seed)
-      }
+    for(j in seq_len(n)){
+      from = n.coefs * (j - 1) + 1
+      to   = n.coefs * j
       betas_draw[, from:to] = MASS::mvrnorm(sim.count, betas[j, ], sigma[from:to, from:to])
     }
-  }else{ #
+  }else{
     boot = function(x, model){
       data = model.frame(model)
       sample_data = data[sample(seq_len(nrow(data)), replace = TRUE), ]
@@ -69,57 +70,39 @@ dc.multinom = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, 
       }else{
         unlist(as.list(t(coef(update(model, data = sample_data)))))
       }
-      
-      
     }
     betas_draw = do.call('rbind', lapply(seq_len(sim.count), boot, model))
   }
-  
-  x = matrix(ncol = 2, nrow = n + 1)
-  pred1 = pred2 = matrix(nrow = n + 1, ncol = sim.count)
-  
-  for(i in 1:sim.count){
-    sim.temp = NULL
-    for(j in 1:n){
-      from = n.coefs * (j-1) + 1
-      to = n.coefs * j
-      if(is.null(sim.temp)){
-        sim.temp = betas_draw[i, from:to]
-      }else{
-        sim.temp = rbind(sim.temp, betas_draw[i,from:to])
-      }
-      
-    }
-    x[,1] = c(0, sim.temp %*% values1)
-    x[,2] = c(0, sim.temp %*% values2)
-    
-    e = exp(x)
-    
-    for(j in 1:(n+1)){
-      pred1[j,i] = e[j, 1] / colSums(e)[1]
-      pred2[j,i] = e[j, 2] / colSums(e)[2]
-    }    
+
+  # Vectorized prediction for both scenarios (row 1 = reference category, yhat = 0)
+  yhat1 = matrix(0, nrow = n + 1, ncol = sim.count)
+  yhat2 = matrix(0, nrow = n + 1, ncol = sim.count)
+  for(j in seq_len(n)){
+    from = n.coefs * (j - 1) + 1
+    to   = n.coefs * j
+    block = betas_draw[, from:to]
+    yhat1[j + 1, ] = block %*% values1
+    yhat2[j + 1, ] = block %*% values2
   }
-  
-  
-  diff = pred1 - pred2
-  
+  e1 = exp(yhat1)
+  e2 = exp(yhat2)
+  pred1 = e1 / rep(colSums(e1), each = n + 1)
+  pred2 = e2 / rep(colSums(e2), each = n + 1)
+  diff  = pred1 - pred2
+
   # return all simulated / bootstrapped values if summary is FALSE
   if(!summary){
     return(list(pred1 = pred1, pred2 = pred2, dc = diff))
   }
-  
-  confint_lower = (1 - conf.int)/2
-  result = matrix(nrow=(n+1),ncol=9)
-  colnames(result) = c("Mean1", paste0("1:", 100 * confint_lower, "%"), paste0("1:", 100 * (1 - confint_lower), "%"), 
-                       "Mean2", paste0("2:", 100 * confint_lower, "%"), paste0("2:", 100 * (1 - confint_lower), "%"), 
+
+  confint_lower = (1 - conf.int) / 2
+  q1 = t(apply(pred1, 1, stats::quantile, probs = c(confint_lower, 1 - confint_lower)))
+  q2 = t(apply(pred2, 1, stats::quantile, probs = c(confint_lower, 1 - confint_lower)))
+  qd = t(apply(diff,  1, stats::quantile, probs = c(confint_lower, 1 - confint_lower)))
+  result = cbind(rowMeans(pred1), q1, rowMeans(pred2), q2, rowMeans(diff), qd)
+  colnames(result) = c("Mean1", paste0("1:", 100 * confint_lower, "%"), paste0("1:", 100 * (1 - confint_lower), "%"),
+                       "Mean2", paste0("2:", 100 * confint_lower, "%"), paste0("2:", 100 * (1 - confint_lower), "%"),
                        "Mean.Diff", paste0("diff:", 100 * confint_lower, "%"), paste0("diff:", 100 * (1 - confint_lower), "%"))
   rownames(result) = model$lev
-  
-  for(j in 1:(n+1)){
-    result[j,] = c(mean(pred1[j,]), quantile(pred1[j,], probs = c(confint_lower, 1 - confint_lower)), 
-                   mean(pred2[j,]), quantile(pred2[j,], probs = c(confint_lower, 1 - confint_lower)),
-                   mean(diff[j,]), quantile(diff[j,], probs = c(confint_lower, 1 - confint_lower)))
-  }
   result
 }

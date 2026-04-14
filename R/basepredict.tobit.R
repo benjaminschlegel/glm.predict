@@ -2,7 +2,7 @@ basepredict.tobit = function(model, values, sim.count = 1000, conf.int = 0.95, s
                              type = c("any", "simulation", "bootstrap"), summary = TRUE){
   # check inputs
   if(sum("tobit" %in% class(model)) == 0){
-    stop("model has to be of type lm()")
+    stop("model has to be of type tobit()")
   }
   if(length(values) != length(coef(model))){
     stop("the length of values is not identical to the number of coefficient of the model")

@@ -49,7 +49,7 @@ dc.mlogit = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, si
   
   betas = coef(model)
   if(is.null(sigma)){
-    sigma = vcov(model)
+    sigma = stats::vcov(model)
   }
   
   # simulation

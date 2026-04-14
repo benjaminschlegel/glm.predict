@@ -45,7 +45,7 @@ dc.lmerMod = function(model, values = NULL, sim.count = 1000, conf.int = 0.95, s
     }
     if(nrow(sigma) != length(values1)){
       warning("sigma and values do not match, ignoring the specified sigma")
-      sigma = vcov(model)
+      sigma = stats::vcov(model)
     }
     if(!is.null(set.seed)){
       set.seed(set.seed)
